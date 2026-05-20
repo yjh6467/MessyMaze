@@ -48,10 +48,10 @@
   <body>
     <main class="game-shell">
       <div class="hud">
-        <strong>점수: <span id="score">0</span></strong>
-        <span id="state">←↑↓→ 이동</span>
+        <strong>점수: <span id="score" aria-live="polite">0</span></strong>
+        <span id="state" role="status" aria-live="polite">←↑↓→ 이동</span>
       </div>
-      <canvas id="game" width="504" height="504" aria-label="팩맨 스타일 아케이드 게임"></canvas>
+      <canvas id="game" width="504" height="504" tabindex="0" aria-label="팩맨 스타일 아케이드 게임"></canvas>
       <p class="hint">모든 점을 먹으면 승리! 유령과 부딪히면 게임 오버입니다. R 키로 재시작.</p>
     </main>
 
@@ -106,6 +106,7 @@
         score = 0;
         pendingDir = null;
         running = true;
+        lastTick = 0;
 
         for (let y = 0; y < rows; y++) {
           for (let x = 0; x < cols; x++) {
@@ -171,8 +172,8 @@
       function moveGhosts() {
         for (const ghost of ghosts) {
           const options = Object.values(dirs).filter((d) => canMove(ghost, d));
-          const continueDir = options.find((d) => d.x === ghost.dir.x && d.y === ghost.dir.y);
-          if (!continueDir || Math.random() < GHOST_DIRECTION_CHANGE_PROBABILITY) {
+          const canContinueCurrentDirection = options.find((d) => d.x === ghost.dir.x && d.y === ghost.dir.y);
+          if (!canContinueCurrentDirection || Math.random() < GHOST_DIRECTION_CHANGE_PROBABILITY) {
             ghost.dir = options[Math.floor(Math.random() * options.length)] ?? { x: 0, y: 0 };
           }
           if (canMove(ghost, ghost.dir)) {
