@@ -57,6 +57,8 @@
 
     <script>
       const TILE = 24;
+      const TICK_INTERVAL_MS = 120;
+      const GHOST_DIRECTION_CHANGE_PROBABILITY = 0.35;
       const MAP = [
         "#####################",
         "#........#........G.#",
@@ -170,7 +172,7 @@
         for (const ghost of ghosts) {
           const options = Object.values(dirs).filter((d) => canMove(ghost, d));
           const continueDir = options.find((d) => d.x === ghost.dir.x && d.y === ghost.dir.y);
-          if (!continueDir || Math.random() < 0.35) {
+          if (!continueDir || Math.random() < GHOST_DIRECTION_CHANGE_PROBABILITY) {
             ghost.dir = options[Math.floor(Math.random() * options.length)] ?? { x: 0, y: 0 };
           }
           if (canMove(ghost, ghost.dir)) {
@@ -192,7 +194,7 @@
       function tick(timestamp) {
         if (!lastTick) lastTick = timestamp;
         const elapsed = timestamp - lastTick;
-        if (elapsed >= 120) {
+        if (elapsed >= TICK_INTERVAL_MS) {
           lastTick = timestamp;
           if (running) {
             movePlayer();
