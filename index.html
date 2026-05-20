@@ -151,7 +151,7 @@
 
       function randomDir() {
         const values = Object.values(dirs);
-        return values[(Math.random() * values.length) | 0];
+        return values[Math.floor(Math.random() * values.length)];
       }
 
       function movePlayer() {
@@ -171,7 +171,7 @@
           const options = Object.values(dirs).filter((d) => canMove(ghost, d));
           const continueDir = options.find((d) => d.x === ghost.dir.x && d.y === ghost.dir.y);
           if (!continueDir || Math.random() < 0.35) {
-            ghost.dir = options[(Math.random() * options.length) | 0] ?? { x: 0, y: 0 };
+            ghost.dir = options[Math.floor(Math.random() * options.length)] ?? { x: 0, y: 0 };
           }
           if (canMove(ghost, ghost.dir)) {
             ghost.x += ghost.dir.x;

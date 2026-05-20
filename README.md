@@ -4,7 +4,7 @@
 
 ## 실행 방법
 
-브라우저에서 `/home/runner/work/MessyMaze/MessyMaze/index.html` 파일을 열면 바로 플레이할 수 있습니다.
+저장소 루트의 `index.html` 파일을 브라우저로 열면 바로 플레이할 수 있습니다.
 
 ## 조작법
 
