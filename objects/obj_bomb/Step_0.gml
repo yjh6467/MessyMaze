@@ -3,14 +3,8 @@ var _cy = y + 16;
 
 switch (bomb_state) {
     case BOMB_IDLE:
-        if (instance_exists(obj_player)) {
-            var _px = obj_player.x + 16;
-            var _py = obj_player.y + 16;
-            if (point_distance(_cx, _cy, _px, _py) <= bomb_radius) {
-                bomb_state = BOMB_WARNING;
-                state_timer = warning_time;
-            }
-        }
+        bomb_state = BOMB_WARNING;
+        state_timer = warning_time;
         break;
 
     case BOMB_WARNING:
@@ -18,6 +12,8 @@ switch (bomb_state) {
         if (state_timer <= 0) {
             bomb_state = BOMB_EXPLODE;
             state_timer = explode_time;
+            image_index = 0;
+            image_speed = 1;
 
             var _hit = collision_circle(_cx, _cy, bomb_radius, obj_player, false, true);
             if (_hit != noone) {

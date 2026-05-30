@@ -54,10 +54,14 @@ if (_mx > 0) {
     sprite_index = spr_player_left;
 }
 
-if (keyboard_check_pressed(vk_space) && invisible_cooldown <= 0) {
-    invisible_timer = invisible_duration;
-    invisible_cooldown = invisible_cooldown_max;
-    dash_remaining = 0;
+if (keyboard_check_pressed(vk_space)) {
+    if (invisible_timer > 0) {
+        invisible_timer = 0;
+    } else if (invisible_cooldown <= 0) {
+        invisible_timer = invisible_duration;
+        invisible_cooldown = invisible_cooldown_max;
+        dash_remaining = 0;
+    }
 }
 
 if (invisible_timer > 0) {
