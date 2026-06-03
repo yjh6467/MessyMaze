@@ -1,4 +1,9 @@
 dir_x = 1;
 dir_y = 0;
-rocket_speed = 12;
+rocket_speed = variable_global_exists("rocket_speed") ? global.rocket_speed : 18;
 life = 180;
+sprite_index = spr_rocket;
+image_xscale = 0.08;
+image_yscale = 0.08;
+image_speed = 0;
+image_angle = point_direction(0, 0, dir_x, dir_y) - 90;

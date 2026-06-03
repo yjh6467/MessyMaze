@@ -5,9 +5,13 @@ BOMB_DESTROY = 3;
 
 bomb_state = BOMB_WARNING;
 bomb_radius = variable_global_exists("bomb_radius") ? global.bomb_radius : 128;
+bomb_range_tiles = max(1, round(bomb_radius / (variable_global_exists("tile_size") ? global.tile_size : 32)));
+bomb_range_tiles_sq = bomb_range_tiles * bomb_range_tiles;
 warning_time = variable_global_exists("bomb_warning_time") ? global.bomb_warning_time : 300;
 state_timer = warning_time;
-explode_time = 12;
+explode_time = sprite_get_number(spr_boom) * 3;
+explode_frame = 0;
+explode_frame_speed = sprite_get_number(spr_boom) / explode_time;
 sprite_index = spr_boom;
 image_index = 0;
 image_speed = 0;

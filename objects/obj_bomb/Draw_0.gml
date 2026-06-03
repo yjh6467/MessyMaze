@@ -1,11 +1,21 @@
 var _cx = x + 16;
 var _cy = y + 16;
+var _tile = variable_global_exists("tile_size") ? global.tile_size : 32;
 
 if (bomb_state == BOMB_IDLE || bomb_state == BOMB_WARNING) {
     var _flash = (state_timer div 6) mod 2;
     draw_set_alpha(0.25);
     draw_set_color(c_red);
-    draw_circle(_cx, _cy, bomb_radius, false);
+    for (var _tx = -bomb_range_tiles; _tx <= bomb_range_tiles; _tx += 1) {
+        for (var _ty = -bomb_range_tiles; _ty <= bomb_range_tiles; _ty += 1) {
+            var _cell_cx = _cx + _tx * _tile;
+            var _cell_cy = _cy + _ty * _tile;
+
+            if (_tx * _tx + _ty * _ty <= bomb_range_tiles_sq) {
+                draw_rectangle(_cell_cx - _tile * 0.5, _cell_cy - _tile * 0.5, _cell_cx + _tile * 0.5, _cell_cy + _tile * 0.5, false);
+            }
+        }
+    }
     draw_set_alpha(1);
 
     var _warn_scale = 32 / sprite_get_width(sprite_index);
@@ -17,10 +27,19 @@ if (bomb_state == BOMB_IDLE || bomb_state == BOMB_WARNING) {
 if (bomb_state == BOMB_EXPLODE) {
     draw_set_alpha(0.45);
     draw_set_color(c_orange);
-    draw_circle(_cx, _cy, bomb_radius, false);
+    for (var _tx = -bomb_range_tiles; _tx <= bomb_range_tiles; _tx += 1) {
+        for (var _ty = -bomb_range_tiles; _ty <= bomb_range_tiles; _ty += 1) {
+            var _cell_cx = _cx + _tx * _tile;
+            var _cell_cy = _cy + _ty * _tile;
+
+            if (_tx * _tx + _ty * _ty <= bomb_range_tiles_sq) {
+                draw_rectangle(_cell_cx - _tile * 0.5, _cell_cy - _tile * 0.5, _cell_cx + _tile * 0.5, _cell_cy + _tile * 0.5, false);
+            }
+        }
+    }
     draw_set_alpha(1);
 
-    var _explode_scale = (bomb_radius * 2) / sprite_get_width(sprite_index);
+    var _explode_scale = 32 / sprite_get_width(sprite_index);
     var _explode_x = _cx - sprite_get_width(sprite_index) * _explode_scale * 0.5;
     var _explode_y = _cy - sprite_get_height(sprite_index) * _explode_scale * 0.5;
     draw_sprite_ext(sprite_index, image_index, _explode_x, _explode_y, _explode_scale, _explode_scale, image_angle, c_white, 1);
