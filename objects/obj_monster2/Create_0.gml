@@ -1,0 +1,1 @@
+scr_monster_ai_init(spr_idle_monster2, spr_walk_left_monster2, spr_walk_right_monster2);
