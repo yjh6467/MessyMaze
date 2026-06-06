@@ -5,7 +5,7 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "?ㅽ겕由쏀듃",
-    "path": "folders/?ㅽ겕由쏀듃.yy",
+    "name": "스크립트",
+    "path": "folders/스크립트.yy",
   },
 }

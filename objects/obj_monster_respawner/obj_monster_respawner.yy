@@ -1,7 +1,7 @@
 {
   "resourceType": "GMObject",
   "resourceVersion": "1.0",
-  "name": "obj_rocket_manager",
+  "name": "obj_monster_respawner",
   "spriteId": null,
   "solid": false,
   "visible": false,
@@ -29,6 +29,6 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Hazards",
-    "path": "folders/오브젝트/Hazards.yy",
+    "path": "folders/?ㅻ툕?앺듃/Hazards.yy",
   },
 }

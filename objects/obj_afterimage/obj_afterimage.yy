@@ -28,7 +28,7 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "?ㅻ툕?앺듃",
-    "path": "folders/?ㅻ툕?앺듃.yy",
+    "name": "Hazards",
+    "path": "folders/오브젝트/Hazards.yy",
   },
 }
