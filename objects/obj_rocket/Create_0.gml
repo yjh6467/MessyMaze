@@ -1,5 +1,6 @@
 dir_x = 1;
 dir_y = 0;
+depth = -10000;
 rocket_speed = variable_global_exists("rocket_speed") ? global.rocket_speed : 18;
 life = 180;
 sprite_index = spr_rocket;

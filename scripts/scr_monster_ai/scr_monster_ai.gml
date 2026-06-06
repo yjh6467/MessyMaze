@@ -305,6 +305,7 @@ function scr_monster_try_move() {
 }
 
 function scr_monster_ai_init(_idle_sprite, _walk_left_sprite, _walk_right_sprite) {
+    depth = -10000;
     idle_sprite = _idle_sprite;
     walk_left_sprite = _walk_left_sprite;
     walk_right_sprite = _walk_right_sprite;

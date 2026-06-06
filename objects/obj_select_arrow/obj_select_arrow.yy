@@ -1,10 +1,13 @@
 {
   "resourceType": "GMObject",
   "resourceVersion": "1.0",
-  "name": "obj_giant_vacuum_manager",
-  "spriteId": null,
+  "name": "obj_select_arrow",
+  "spriteId": {
+    "name": "spr_select_arrow",
+    "path": "sprites/spr_select_arrow/spr_select_arrow.yy",
+  },
   "solid": false,
-  "visible": false,
+  "visible": true,
   "managed": true,
   "spriteMaskId": null,
   "persistent": false,
@@ -28,7 +31,7 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Hazards",
-    "path": "folders/오브젝트/Hazards.yy",
+    "name": "MainMenu",
+    "path": "folders/오브젝트/MainMenu.yy",
   },
 }

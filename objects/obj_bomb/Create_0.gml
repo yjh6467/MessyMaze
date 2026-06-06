@@ -3,6 +3,7 @@ BOMB_WARNING = 1;
 BOMB_EXPLODE = 2;
 BOMB_DESTROY = 3;
 
+depth = -10000;
 bomb_state = BOMB_WARNING;
 bomb_radius = variable_global_exists("bomb_radius") ? global.bomb_radius : 128;
 bomb_range_tiles = max(1, round(bomb_radius / (variable_global_exists("tile_size") ? global.tile_size : 32)));
