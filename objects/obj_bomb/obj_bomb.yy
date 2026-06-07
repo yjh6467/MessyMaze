@@ -3,8 +3,8 @@
   "resourceVersion": "1.0",
   "name": "obj_bomb",
   "spriteId": {
-    "name": "spr_boom",
-    "path": "sprites/spr_boom/spr_boom.yy",
+    "name": "spr_boom1",
+    "path": "sprites/spr_boom1/spr_boom1.yy",
   },
   "solid": false,
   "visible": true,

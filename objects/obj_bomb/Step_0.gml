@@ -10,8 +10,15 @@ switch (bomb_state) {
 
     case BOMB_WARNING:
         state_timer -= 1;
+        var _warning_progress = clamp(1 - state_timer / max(1, warning_time), 0, 0.9999);
+        var _warning_index = clamp(floor(_warning_progress * array_length(bomb_warning_sprites)), 0, array_length(bomb_warning_sprites) - 1);
+        sprite_index = bomb_warning_sprites[_warning_index];
+        image_index = 0;
+        image_speed = 0;
+
         if (state_timer <= 0) {
             bomb_state = BOMB_EXPLODE;
+            sprite_index = spr_boom;
             state_timer = explode_time;
             explode_frame = 0;
             image_index = 0;

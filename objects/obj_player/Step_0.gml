@@ -185,7 +185,7 @@ if (_mx > 0) {
     sprite_index = spr_player_left;
 }
 
-if (keyboard_check_pressed(vk_space)) {
+if (keyboard_check_pressed(vk_control)) {
     if (invisible_timer > 0) {
         invisible_timer = 0;
     } else if (invisible_cooldown <= 0) {
