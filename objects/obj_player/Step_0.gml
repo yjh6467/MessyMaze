@@ -1,10 +1,15 @@
+if ((variable_global_exists("game_cleared") && global.game_cleared) || (variable_global_exists("game_over") && global.game_over)) {
+    exit;
+}
+
 if (is_dead) {
     death_timer -= 1;
     if (death_timer <= 0) {
-        if (!variable_global_exists("player_lives")) global.player_lives = 3;
+        if (!variable_global_exists("player_lives")) global.player_lives = 2;
 
         if (global.player_lives <= 0) {
-            room_restart();
+            global.game_over = true;
+            show_debug_message("GAME OVER");
         } else {
             x = spawn_x;
             y = spawn_y;
@@ -45,9 +50,11 @@ var _collect_score_slime_pieces = function() {
     var _piece = instance_place(x, y, obj_score_slime_piece);
     while (_piece != noone) {
         global.score += global.score_slime_piece_value;
+        global.slime_count = floor(global.score / max(1, global.score_slime_piece_value));
         with (_piece) {
             instance_destroy();
         }
+        scr_check_exit_open();
         _piece = instance_place(x, y, obj_score_slime_piece);
     }
 };
@@ -65,6 +72,11 @@ var _place_meeting_static_wall = function(_test_x, _test_y) {
         if (place_meeting(_test_x, _test_y, _wall)) {
             return true;
         }
+    }
+
+    if (!variable_global_exists("exit_open")) global.exit_open = false;
+    if (!global.exit_open && place_meeting(_test_x, _test_y, obj_exit_wall)) {
+        return true;
     }
 
     return false;

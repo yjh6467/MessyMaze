@@ -42,9 +42,9 @@ if (variable_global_exists("option_open") && global.option_open) {
         } else if (_mx >= _slider_x - 10 && _mx <= _slider_x + _slider_w + 10 && _my >= _sfx_y - _slider_h * 0.5 && _my <= _sfx_y + _slider_h * 0.5) {
             dragging_slider = 1;
         } else if (_mx >= _left_x && _mx <= _left_x + _arrow_w && _my >= _difficulty_y - _arrow_h * 0.5 && _my <= _difficulty_y + _arrow_h * 0.5) {
-            global.difficulty = (global.difficulty + 2) mod 3;
+            global.difficulty = (global.difficulty + 3) mod 4;
         } else if (_mx >= _right_x && _mx <= _right_x + _arrow_w && _my >= _difficulty_y - _arrow_h * 0.5 && _my <= _difficulty_y + _arrow_h * 0.5) {
-            global.difficulty = (global.difficulty + 1) mod 3;
+            global.difficulty = (global.difficulty + 1) mod 4;
         } else if (_mx >= _ok_x && _mx <= _ok_x + _button_w && _my >= _button_y && _my <= _button_y + _button_h) {
             global.option_open = false;
         } else if (_mx >= _close_x && _mx <= _close_x + _button_w && _my >= _button_y && _my <= _button_y + _button_h) {

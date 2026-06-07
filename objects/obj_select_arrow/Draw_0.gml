@@ -6,7 +6,7 @@ if (!variable_global_exists("option_open") || !global.option_open) {
 
 if (!variable_global_exists("bgm_volume")) global.bgm_volume = 0.8;
 if (!variable_global_exists("sfx_volume")) global.sfx_volume = 0.7;
-if (!variable_global_exists("difficulty")) global.difficulty = 1;
+if (!variable_global_exists("difficulty")) global.difficulty = 2;
 
 draw_set_font(fnt_galmuri11);
 
@@ -117,20 +117,24 @@ draw_set_color(c_white);
 draw_text(_slider_x + _slider_w + 28, _sfx_y, string(round(global.sfx_volume * 100)) + "%");
 
 var _difficulty_y = _box_y + 290;
-var _difficulty_names = ["쉬움", "보통", "어려움"];
-var _difficulty_index = round(clamp(global.difficulty, 0, 2));
+var _difficulty_names = ["테스트", "쉬움", "보통", "어려움"];
+var _difficulty_index = round(clamp(global.difficulty, 0, 3));
 var _difficulty_color = _lime;
 
 switch (_difficulty_index) {
     case 0:
-        _difficulty_color = make_color_rgb(94, 231, 255);
+        _difficulty_color = c_white;
         break;
 
     case 1:
-        _difficulty_color = make_color_rgb(183, 255, 26);
+        _difficulty_color = make_color_rgb(94, 231, 255);
         break;
 
     case 2:
+        _difficulty_color = make_color_rgb(183, 255, 26);
+        break;
+
+    case 3:
         _difficulty_color = make_color_rgb(255, 74, 61);
         break;
 }

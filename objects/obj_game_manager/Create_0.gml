@@ -1,31 +1,39 @@
 if (!variable_global_exists("option_open")) global.option_open = false;
 if (!variable_global_exists("bgm_volume")) global.bgm_volume = 0.8;
 if (!variable_global_exists("sfx_volume")) global.sfx_volume = 0.7;
-if (!variable_global_exists("difficulty")) global.difficulty = 1;
+if (!variable_global_exists("difficulty")) global.difficulty = 2;
 
-global.tile_size = 32;
-global.player_speed = 3;
-global.bomb_spawn_interval = 180;
-global.max_bomb_count = 3;
-global.bomb_radius = 128;
-global.bomb_warning_time = 300;
-global.rocket_spawn_interval = 240;
-global.rocket_warning_time = 180;
-global.rocket_speed = 18;
-global.giant_vacuum_interval = room_speed * 30;
-global.giant_vacuum_warning_interval = room_speed * 2;
-global.giant_vacuum_warning_count = 3;
-global.giant_vacuum_speed = 8;
-global.giant_vacuum_hit_margin_x = 100;
-global.giant_vacuum_hit_margin_y = 100;
-global.giant_vacuum_spawn_extra_y = 300;
-global.monster_respawn_delay = room_speed * 5;
+scr_apply_difficulty_settings();
+
 global.score = 0;
 global.score_slime_piece_value = 1;
 global.elapsed_time = 0;
-global.player_lives = 3;
+global.player_lives = variable_global_exists("player_lives_max") ? global.player_lives_max : 2;
 global.slime_count = 0;
 global.total_slime_count = instance_number(obj_score_slime_piece);
+if (global.difficulty == 0) {
+    global.score = global.total_slime_count * global.score_slime_piece_value;
+    global.slime_count = global.total_slime_count;
+}
+global.exit_open = false;
+global.game_cleared = false;
+global.game_over = false;
+
+if (instance_number(obj_exit_wall) > 0) {
+    var _exit_wall = instance_find(obj_exit_wall, 0);
+    global.clear_exit_x = (_exit_wall.bbox_left + _exit_wall.bbox_right) * 0.5;
+    global.clear_exit_y = (_exit_wall.bbox_top + _exit_wall.bbox_bottom) * 0.5;
+} else {
+    // TODO: Place obj_exit_wall in Maze to define the clear exit position.
+    global.clear_exit_x = room_width * 0.5;
+    global.clear_exit_y = room_height - 32;
+}
+
+if (instance_number(obj_clear_exit) <= 0) {
+    instance_create_layer(global.clear_exit_x, global.clear_exit_y, "Instances", obj_clear_exit);
+}
+
+scr_check_exit_open();
 
 audio_stop_sound(sfx_vacuum);
 audio_stop_sound(sfx_vacuum_warning);

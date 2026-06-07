@@ -42,7 +42,7 @@ var _minute_text = (_minutes < 10 ? "0" : "") + string(_minutes);
 var _second_text = (_seconds < 10 ? "0" : "") + string(_seconds);
 var _time_text = _minute_text + ":" + _second_text;
 
-var _lives = variable_global_exists("player_lives") ? global.player_lives : 3;
+var _lives = variable_global_exists("player_lives") ? global.player_lives : 2;
 var _slime = variable_global_exists("slime_count") ? global.slime_count : 0;
 var _total_slime = variable_global_exists("total_slime_count") ? global.total_slime_count : instance_number(obj_score_slime_piece) + _slime;
 
@@ -78,6 +78,13 @@ for (var _i = 0; _i < 3; _i += 1) {
     draw_set_halign(fa_right);
     draw_set_color(_lime);
     draw_text(_value_x, _text_y, _value);
+}
+
+if (
+    (variable_global_exists("game_cleared") && global.game_cleared)
+    || (variable_global_exists("game_over") && global.game_over)
+) {
+    scr_draw_result_popup(_time_text, _lives, _slime, _total_slime);
 }
 
 draw_set_alpha(1);
