@@ -339,6 +339,7 @@ function scr_monster_ai_init(_idle_sprite, _walk_left_sprite, _walk_right_sprite
 }
 
 function scr_monster_ai_step() {
+    if (scr_pause_step_guard()) exit;
     if (!instance_exists(obj_player)) exit;
 
     if (!escape_spawn_room && scr_monster_in_spawn_room()) {

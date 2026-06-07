@@ -117,8 +117,8 @@ draw_set_color(c_white);
 draw_text(_slider_x + _slider_w + 28, _sfx_y, string(round(global.sfx_volume * 100)) + "%");
 
 var _difficulty_y = _box_y + 290;
-var _difficulty_names = ["테스트", "쉬움", "보통", "어려움"];
-var _difficulty_index = round(clamp(global.difficulty, 0, 3));
+var _difficulty_names = ["테스트", "쉬움", "보통", "어려움", "무한"];
+var _difficulty_index = round(clamp(global.difficulty, 0, 4));
 var _difficulty_color = _lime;
 
 switch (_difficulty_index) {
@@ -136,6 +136,10 @@ switch (_difficulty_index) {
 
     case 3:
         _difficulty_color = make_color_rgb(255, 74, 61);
+        break;
+
+    case 4:
+        _difficulty_color = make_color_rgb(128, 0, 32);
         break;
 }
 

@@ -1,5 +1,9 @@
 depth = -20000;
 
+if (variable_global_exists("game_paused")) global.game_paused = false;
+if (variable_global_exists("gameplay_frozen")) global.gameplay_frozen = false;
+scr_cleanup_gameplay_audio();
+
 if (!variable_global_exists("option_open")) global.option_open = false;
 if (!variable_global_exists("bgm_volume")) global.bgm_volume = 0.8;
 if (!variable_global_exists("sfx_volume")) global.sfx_volume = 0.7;

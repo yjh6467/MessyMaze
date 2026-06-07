@@ -1,8 +1,13 @@
 if (!variable_global_exists("exit_open")) global.exit_open = false;
 if (!variable_global_exists("game_cleared")) global.game_cleared = false;
 if (!variable_global_exists("game_over")) global.game_over = false;
+if (!variable_global_exists("game_paused")) global.game_paused = false;
 
 visible = global.exit_open;
+
+if (global.game_paused) {
+    exit;
+}
 
 if (!global.exit_open || global.game_cleared || global.game_over) {
     exit;

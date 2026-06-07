@@ -1,3 +1,7 @@
+if (scr_pause_step_guard()) {
+    exit;
+}
+
 if (!instance_exists(obj_game_manager)) exit;
 if (!instance_exists(obj_player)) exit;
 

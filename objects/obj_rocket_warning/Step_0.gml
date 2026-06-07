@@ -1,3 +1,7 @@
+if (scr_pause_step_guard()) {
+    exit;
+}
+
 warning_time -= 1;
 if (warning_time <= 0) {
     var _rocket = instance_create_layer(x, y, "Instances", obj_rocket);

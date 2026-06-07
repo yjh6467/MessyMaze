@@ -83,6 +83,8 @@ if (
     || (variable_global_exists("game_over") && global.game_over)
 ) {
     scr_draw_result_popup(_time_text, _lives, _slime, _total_slime);
+} else if (variable_global_exists("game_paused") && global.game_paused) {
+    scr_draw_pause_popup();
 }
 
 draw_set_alpha(1);

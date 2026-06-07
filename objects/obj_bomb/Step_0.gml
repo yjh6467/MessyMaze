@@ -1,3 +1,7 @@
+if (scr_pause_step_guard()) {
+    exit;
+}
+
 var _cx = x + 16;
 var _cy = y + 16;
 var _tile = variable_global_exists("tile_size") ? global.tile_size : 32;

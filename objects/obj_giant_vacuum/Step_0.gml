@@ -1,3 +1,7 @@
+if (scr_pause_step_guard()) {
+    exit;
+}
+
 y += move_speed;
 
 var _hit_left = x + hit_margin_x;

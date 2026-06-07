@@ -13,6 +13,6 @@ if (dash_cooldown > 0) {
 }
 
 if (invisible_cooldown > 0) {
-    draw_set_color(c_blue);
+    draw_set_color(make_color_rgb(180, 92, 255));
     draw_rectangle(x, y - 9, x + 32 * (1 - invisible_cooldown / invisible_cooldown_max), y - 6, false);
 }

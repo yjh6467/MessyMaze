@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "scr_check_exit_open",
+  "name": "scr_cleanup_gameplay_audio",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {

@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "scr_check_exit_open",
+  "name": "scr_set_game_paused",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {

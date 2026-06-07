@@ -1,5 +1,6 @@
 function scr_player_hit(_reason) {
     if (!instance_exists(obj_player)) return;
+    if (variable_global_exists("game_paused") && global.game_paused) return;
     if (variable_global_exists("game_cleared") && global.game_cleared) return;
     if (variable_global_exists("game_over") && global.game_over) return;
 

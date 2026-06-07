@@ -1,3 +1,7 @@
+if (scr_pause_step_guard()) {
+    exit;
+}
+
 if (!enabled) exit;
 
 x += dir_x * move_speed;

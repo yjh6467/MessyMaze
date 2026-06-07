@@ -1,3 +1,7 @@
+if (scr_pause_step_guard()) {
+    exit;
+}
+
 respawn_timer -= 1;
 
 if (respawn_timer <= 0) {

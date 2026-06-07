@@ -1,3 +1,7 @@
+if (scr_pause_step_guard()) {
+    exit;
+}
+
 if ((variable_global_exists("game_cleared") && global.game_cleared) || (variable_global_exists("game_over") && global.game_over)) {
     exit;
 }

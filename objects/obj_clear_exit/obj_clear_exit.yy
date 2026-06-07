@@ -28,7 +28,7 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Managers",
-    "path": "folders/?ㅻ툕?앺듃/Managers.yy",
+    "name": "오브젝트",
+    "path": "folders/오브젝트.yy",
   },
 }

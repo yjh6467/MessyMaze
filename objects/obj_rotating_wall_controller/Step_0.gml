@@ -1,3 +1,12 @@
+if (
+    (variable_global_exists("game_paused") && global.game_paused)
+    || (variable_global_exists("gameplay_frozen") && global.gameplay_frozen)
+    || (variable_global_exists("game_cleared") && global.game_cleared)
+    || (variable_global_exists("game_over") && global.game_over)
+) {
+    exit;
+}
+
 if (!enabled) exit;
 
 var _rotating_wall_objects = [

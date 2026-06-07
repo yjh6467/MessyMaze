@@ -18,6 +18,7 @@ if (global.difficulty == 0) {
 global.exit_open = false;
 global.game_cleared = false;
 global.game_over = false;
+scr_set_game_paused(false);
 
 if (instance_number(obj_exit_wall) > 0) {
     var _exit_wall = instance_find(obj_exit_wall, 0);

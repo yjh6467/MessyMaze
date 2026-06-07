@@ -1,3 +1,7 @@
+if (scr_pause_step_guard()) {
+    exit;
+}
+
 x += dir_x * rocket_speed;
 y += dir_y * rocket_speed;
 life -= 1;

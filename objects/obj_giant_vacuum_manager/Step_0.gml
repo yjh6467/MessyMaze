@@ -1,3 +1,7 @@
+if (scr_pause_step_guard()) {
+    exit;
+}
+
 switch (vacuum_state) {
     case VACUUM_WAIT:
         event_timer -= 1;

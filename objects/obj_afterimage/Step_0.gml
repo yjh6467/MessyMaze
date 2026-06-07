@@ -1,3 +1,7 @@
+if (scr_pause_step_guard()) {
+    exit;
+}
+
 image_alpha -= fade_speed;
 
 if (image_alpha <= 0) {

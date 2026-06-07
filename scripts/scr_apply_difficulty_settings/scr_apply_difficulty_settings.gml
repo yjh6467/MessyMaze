@@ -1,7 +1,7 @@
 function scr_apply_difficulty_settings() {
     if (!variable_global_exists("difficulty")) global.difficulty = 2;
 
-    var _difficulty = round(clamp(global.difficulty, 0, 3));
+    var _difficulty = round(clamp(global.difficulty, 0, 4));
     global.difficulty = _difficulty;
 
     var _difficulty_name = "NORMAL";
@@ -21,6 +21,10 @@ function scr_apply_difficulty_settings() {
         case 3:
             _difficulty_name = "HARD";
             break;
+
+        case 4:
+            _difficulty_name = "INFINITE";
+            break;
     }
 
     global.tile_size = 32;
@@ -35,6 +39,7 @@ function scr_apply_difficulty_settings() {
 
     global.bomb_spawn_interval = 180;
     global.max_bomb_count = 3;
+    global.bomb_spawn_radius = 128;
     global.bomb_radius = 128;
     global.bomb_spawn_attempts = 30;
     global.bomb_spawn_distance_min = 64;
@@ -117,8 +122,29 @@ function scr_apply_difficulty_settings() {
         global.giant_vacuum_interval = room_speed * 30;
     }
 
+    if (_difficulty == 4) {
+        // TODO: Add endless-mode specific scoring/spawn/clear rules.
+        global.player_lives_max = 2;
+
+        global.bomb_spawn_interval = room_speed * 3;
+        global.max_bomb_count = 3;
+        global.bomb_warning_time = round(room_speed * 4.5);
+
+        global.rocket_spawn_interval = room_speed * 4;
+        global.rocket_warning_time = round(room_speed * 2.5);
+
+        global.monster_chase_speed = 2.6;
+        global.monster_sight_radius = global.tile_size * 9;
+
+        global.rotating_wall_speed = 0.9;
+
+        global.giant_vacuum_interval = room_speed * 30;
+    }
+
     show_debug_message("Difficulty Applied: " + _difficulty_name);
     show_debug_message("Bomb interval: " + string(global.bomb_spawn_interval));
+    show_debug_message("Bomb spawn radius: " + string(global.bomb_spawn_radius));
+    show_debug_message("Bomb explosion radius: " + string(global.bomb_radius));
     show_debug_message("Rocket interval: " + string(global.rocket_spawn_interval));
     show_debug_message("Monster chase speed: " + string(global.monster_chase_speed));
 }
