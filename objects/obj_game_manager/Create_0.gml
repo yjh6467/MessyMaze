@@ -22,6 +22,10 @@ global.giant_vacuum_spawn_extra_y = 300;
 global.monster_respawn_delay = room_speed * 5;
 global.score = 0;
 global.score_slime_piece_value = 1;
+global.elapsed_time = 0;
+global.player_lives = 3;
+global.slime_count = 0;
+global.total_slime_count = instance_number(obj_score_slime_piece);
 
 audio_stop_sound(sfx_vacuum);
 audio_stop_sound(sfx_vacuum_warning);
@@ -36,4 +40,8 @@ if (instance_number(obj_rocket_manager) <= 0) {
 
 if (instance_number(obj_giant_vacuum_manager) <= 0) {
     instance_create_layer(0, 0, "Instances", obj_giant_vacuum_manager);
+}
+
+if (instance_number(obj_game_hud) <= 0) {
+    instance_create_layer(0, 0, "Instances", obj_game_hud);
 }

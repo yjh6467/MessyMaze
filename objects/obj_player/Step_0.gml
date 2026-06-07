@@ -1,9 +1,29 @@
 if (is_dead) {
     death_timer -= 1;
     if (death_timer <= 0) {
-        room_restart();
+        if (!variable_global_exists("player_lives")) global.player_lives = 3;
+
+        if (global.player_lives <= 0) {
+            room_restart();
+        } else {
+            x = spawn_x;
+            y = spawn_y;
+            is_dead = false;
+            death_timer = 0;
+            dash_remaining = 0;
+            dash_cooldown = 0;
+            invisible_timer = 0;
+            image_alpha = normal_image_alpha;
+            image_speed = normal_image_speed;
+            image_blend = c_white;
+            respawn_grace_timer = respawn_grace_duration;
+        }
     }
     exit;
+}
+
+if (respawn_grace_timer > 0) {
+    respawn_grace_timer -= 1;
 }
 
 if (dash_cooldown > 0) dash_cooldown -= 1;

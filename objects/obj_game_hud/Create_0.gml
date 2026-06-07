@@ -1,0 +1,18 @@
+depth = -30000;
+visible = true;
+global.hud_height = 96;
+display_set_gui_size(1600, 1056);
+
+if (instance_number(obj_game_hud) > 1) {
+    instance_destroy();
+    exit;
+}
+
+hud_start_time_ms = current_time;
+
+if (!variable_global_exists("elapsed_time")) global.elapsed_time = 0;
+if (!variable_global_exists("player_lives")) global.player_lives = 3;
+if (!variable_global_exists("slime_count")) global.slime_count = variable_global_exists("score") ? global.score : 0;
+
+// score currently tracks collected slime pieces, so total starts as collected + remaining placed pieces.
+global.total_slime_count = global.slime_count + instance_number(obj_score_slime_piece);
