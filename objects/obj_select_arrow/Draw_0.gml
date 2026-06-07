@@ -8,7 +8,7 @@ if (!variable_global_exists("bgm_volume")) global.bgm_volume = 0.8;
 if (!variable_global_exists("sfx_volume")) global.sfx_volume = 0.7;
 if (!variable_global_exists("difficulty")) global.difficulty = 1;
 
-draw_set_font(fnt_korean_ui);
+draw_set_font(fnt_galmuri11);
 
 var _w = room_width;
 var _h = room_height;
