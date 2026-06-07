@@ -123,22 +123,9 @@ function scr_apply_difficulty_settings() {
     }
 
     if (_difficulty == 4) {
-        // TODO: Add endless-mode specific scoring/spawn/clear rules.
-        global.player_lives_max = 2;
-
-        global.bomb_spawn_interval = room_speed * 3;
-        global.max_bomb_count = 3;
-        global.bomb_warning_time = round(room_speed * 4.5);
-
-        global.rocket_spawn_interval = room_speed * 4;
-        global.rocket_warning_time = round(room_speed * 2.5);
-
-        global.monster_chase_speed = 2.6;
-        global.monster_sight_radius = global.tile_size * 9;
-
-        global.rotating_wall_speed = 0.9;
-
-        global.giant_vacuum_interval = room_speed * 30;
+        global.infinite_slime_respawn_min = room_speed * 60;
+        global.infinite_slime_respawn_max = room_speed * 90;
+        scr_apply_infinite_difficulty(0, true);
     }
 
     show_debug_message("Difficulty Applied: " + _difficulty_name);

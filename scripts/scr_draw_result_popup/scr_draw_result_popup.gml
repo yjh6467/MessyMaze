@@ -25,6 +25,8 @@ function scr_draw_result_popup(_time_text, _lives, _slime, _total_slime) {
     var _danger = make_color_rgb(255, 74, 61);
     var _title_color = _is_clear ? _lime : _danger;
     var _retry_accent = _is_clear ? _lime : _neon_blue;
+    var _is_infinite = variable_global_exists("difficulty") && global.difficulty == 4;
+    var _slime_text = _is_infinite ? string(_slime) : string(_slime) + " / " + string(_total_slime);
 
     draw_set_alpha(1);
     draw_set_halign(fa_center);
@@ -73,7 +75,7 @@ function scr_draw_result_popup(_time_text, _lives, _slime, _total_slime) {
     draw_text(_value_x, _row_y, _time_text);
     draw_set_color(_lime);
     draw_text(_value_x, _row_y + _row_gap, "x " + string(_lives));
-    draw_text(_value_x, _row_y + _row_gap * 2, string(_slime) + " / " + string(_total_slime));
+    draw_text(_value_x, _row_y + _row_gap * 2, _slime_text);
 
     draw_set_halign(fa_center);
 

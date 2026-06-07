@@ -107,7 +107,20 @@ if (!variable_instance_exists(id, "hud_elapsed_frames")) hud_elapsed_frames = gl
 hud_elapsed_frames += 1;
 global.elapsed_time = max(0, floor(hud_elapsed_frames / max(1, room_speed)));
 
-if (variable_global_exists("difficulty") && global.difficulty == 0) {
+if (!variable_global_exists("slime_piece_anim_tick")) global.slime_piece_anim_tick = 0;
+if (!variable_global_exists("slime_piece_anim_frame_hold")) global.slime_piece_anim_frame_hold = max(1, round(room_speed / 8));
+
+var _slime_anim_frame_count = max(1, sprite_get_number(spr_score_slime_piece));
+global.slime_piece_anim_index = floor(global.slime_piece_anim_tick / max(1, global.slime_piece_anim_frame_hold)) mod _slime_anim_frame_count;
+global.slime_piece_anim_tick += 1;
+
+var _difficulty = variable_global_exists("difficulty") ? global.difficulty : 2;
+
+if (_difficulty == 4) {
+    scr_apply_infinite_difficulty(floor(global.elapsed_time / 60), false);
+}
+
+if (_difficulty == 0) {
     var _test_total = instance_number(obj_score_slime_piece);
     if (!variable_global_exists("total_slime_count") || global.total_slime_count < _test_total) {
         global.total_slime_count = _test_total;
@@ -118,6 +131,12 @@ if (variable_global_exists("difficulty") && global.difficulty == 0) {
 
     if (!variable_global_exists("exit_open") || !global.exit_open) {
         scr_check_exit_open();
+    }
+} else if (_difficulty == 4) {
+    global.slime_count = floor(global.score / max(1, global.score_slime_piece_value));
+
+    if (!variable_global_exists("total_slime_count") || global.total_slime_count <= 0) {
+        global.total_slime_count = global.slime_count + instance_number(obj_score_slime_piece);
     }
 } else {
     global.slime_count = floor(global.score / max(1, global.score_slime_piece_value));

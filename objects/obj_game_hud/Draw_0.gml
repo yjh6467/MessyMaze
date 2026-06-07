@@ -45,13 +45,14 @@ var _time_text = _minute_text + ":" + _second_text;
 var _lives = variable_global_exists("player_lives") ? global.player_lives : 2;
 var _slime = variable_global_exists("slime_count") ? global.slime_count : 0;
 var _total_slime = variable_global_exists("total_slime_count") ? global.total_slime_count : instance_number(obj_score_slime_piece) + _slime;
+var _is_infinite = variable_global_exists("difficulty") && global.difficulty == 4;
 
 for (var _i = 0; _i < 3; _i += 1) {
     var _box_w = (_i == 0) ? _life_w : ((_i == 1) ? _time_w : _slime_w);
     var _x = (_i == 0) ? _left_x : ((_i == 1) ? round((_draw_w - _time_w) * 0.5) : _right_x);
     var _y = round(clamp(_top, 0, _hud_h - _box_h));
     var _label = (_i == 0) ? "목숨" : ((_i == 1) ? "시간" : "조각");
-    var _value = (_i == 0) ? "x " + string(_lives) : ((_i == 1) ? _time_text : string(_slime) + " / " + string(_total_slime));
+    var _value = (_i == 0) ? "x " + string(_lives) : ((_i == 1) ? _time_text : (_is_infinite ? string(_slime) : string(_slime) + " / " + string(_total_slime)));
 
     _x = round(_x);
 

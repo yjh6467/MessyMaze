@@ -53,12 +53,34 @@ if (!variable_global_exists("score_slime_piece_value")) global.score_slime_piece
 var _collect_score_slime_pieces = function() {
     var _piece = instance_place(x, y, obj_score_slime_piece);
     while (_piece != noone) {
+        var _is_infinite = variable_global_exists("difficulty") && global.difficulty == 4;
+        var _piece_x = _piece.x;
+        var _piece_y = _piece.y;
+
         global.score += global.score_slime_piece_value;
         global.slime_count = floor(global.score / max(1, global.score_slime_piece_value));
+
+        if (_is_infinite) {
+            var _respawner = instance_create_layer(_piece_x, _piece_y, _piece.layer, obj_slime_respawner);
+            _respawner.respawn_layer = _piece.layer;
+            _respawner.respawn_image_xscale = _piece.image_xscale;
+            _respawner.respawn_image_yscale = _piece.image_yscale;
+            _respawner.respawn_image_angle = _piece.image_angle;
+            _respawner.respawn_image_index = _piece.image_index;
+            _respawner.respawn_image_speed = _piece.image_speed;
+            _respawner.respawn_image_blend = _piece.image_blend;
+            _respawner.respawn_image_alpha = _piece.image_alpha;
+            _respawner.respawn_piece_depth = _piece.depth;
+        }
+
         with (_piece) {
             instance_destroy();
         }
-        scr_check_exit_open();
+
+        if (!_is_infinite) {
+            scr_check_exit_open();
+        }
+
         _piece = instance_place(x, y, obj_score_slime_piece);
     }
 };

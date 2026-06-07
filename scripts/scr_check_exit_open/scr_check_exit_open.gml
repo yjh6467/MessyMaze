@@ -7,6 +7,11 @@ function scr_check_exit_open() {
     }
     if (!variable_global_exists("exit_open")) global.exit_open = false;
 
+    if (variable_global_exists("difficulty") && global.difficulty == 4) {
+        global.exit_open = false;
+        return;
+    }
+
     global.slime_count = floor(global.score / max(1, global.score_slime_piece_value));
     if (variable_global_exists("difficulty") && global.difficulty == 0) {
         var _test_total = instance_number(obj_score_slime_piece);
