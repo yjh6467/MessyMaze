@@ -1,3 +1,8 @@
+if (!variable_global_exists("option_open")) global.option_open = false;
+if (!variable_global_exists("bgm_volume")) global.bgm_volume = 0.8;
+if (!variable_global_exists("sfx_volume")) global.sfx_volume = 0.7;
+if (!variable_global_exists("difficulty")) global.difficulty = 1;
+
 global.tile_size = 32;
 global.player_speed = 3;
 global.bomb_spawn_interval = 180;

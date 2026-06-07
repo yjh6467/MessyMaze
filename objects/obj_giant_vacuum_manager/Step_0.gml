@@ -12,7 +12,8 @@ switch (vacuum_state) {
         warning_timer -= 1;
         if (warning_timer <= 0) {
             if (warning_count > 0) {
-                audio_play_sound(sfx_vacuum_warning, 10, false);
+                var _warning_sound = audio_play_sound(sfx_vacuum_warning, 10, false);
+                audio_sound_gain(_warning_sound, variable_global_exists("sfx_volume") ? global.sfx_volume : 0.7, 0);
                 warning_count -= 1;
                 warning_timer = warning_interval;
             } else {
