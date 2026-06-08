@@ -7,4 +7,4 @@ hit_margin_y = variable_global_exists("giant_vacuum_hit_margin_y") ? global.gian
 image_speed = 1;
 
 vacuum_sound = audio_play_sound(sfx_vacuum, 10, false);
-audio_sound_gain(vacuum_sound, variable_global_exists("sfx_volume") ? global.sfx_volume : 0.7, 0);
+audio_sound_gain(vacuum_sound, variable_global_exists("sfx_volume") ? global.sfx_volume : 0.5, 0);

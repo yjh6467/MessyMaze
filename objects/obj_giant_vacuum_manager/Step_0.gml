@@ -17,7 +17,10 @@ switch (vacuum_state) {
         if (warning_timer <= 0) {
             if (warning_count > 0) {
                 var _warning_sound = audio_play_sound(sfx_vacuum_warning, 10, false);
-                audio_sound_gain(_warning_sound, variable_global_exists("sfx_volume") ? global.sfx_volume : 0.7, 0);
+                audio_sound_gain(_warning_sound, variable_global_exists("sfx_volume") ? global.sfx_volume : 0.5, 0);
+                global.screen_shake_timer = 12;
+                global.screen_shake_duration = 12;
+                global.screen_shake_intensity = 5;
                 warning_count -= 1;
                 warning_timer = warning_interval;
             } else {

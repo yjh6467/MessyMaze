@@ -5,9 +5,11 @@ if (variable_global_exists("gameplay_frozen")) global.gameplay_frozen = false;
 scr_cleanup_gameplay_audio();
 
 if (!variable_global_exists("option_open")) global.option_open = false;
-if (!variable_global_exists("bgm_volume")) global.bgm_volume = 0.8;
-if (!variable_global_exists("sfx_volume")) global.sfx_volume = 0.7;
+if (!variable_global_exists("bgm_volume")) global.bgm_volume = 0.5;
+if (!variable_global_exists("sfx_volume")) global.sfx_volume = 0.5;
 if (!variable_global_exists("difficulty")) global.difficulty = 2;
+scr_play_bgm(sfx_mainmenu_bgm);
+scr_apply_audio_volumes();
 
 menu_buttons = [obj_gamestart_btn, obj_option_btn, obj_quit_btn];
 menu_button_count = array_length(menu_buttons);

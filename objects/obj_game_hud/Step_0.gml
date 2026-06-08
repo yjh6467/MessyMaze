@@ -7,11 +7,50 @@ if (!variable_global_exists("game_cleared")) global.game_cleared = false;
 if (!variable_global_exists("game_over")) global.game_over = false;
 if (!variable_global_exists("game_paused")) global.game_paused = false;
 if (!variable_global_exists("gameplay_frozen")) global.gameplay_frozen = false;
+if (!variable_global_exists("screen_shake_timer")) global.screen_shake_timer = 0;
+if (!variable_global_exists("screen_shake_duration")) global.screen_shake_duration = 0;
+if (!variable_global_exists("screen_shake_intensity")) global.screen_shake_intensity = 0;
+if (!variable_global_exists("screen_shake_camera_base_x")) global.screen_shake_camera_base_x = 0;
+if (!variable_global_exists("screen_shake_camera_base_y")) global.screen_shake_camera_base_y = 0;
+
+if (global.screen_shake_timer > 0 && !global.game_paused && !global.game_cleared && !global.game_over) {
+    var _shake_progress = global.screen_shake_timer / max(1, global.screen_shake_duration);
+    var _shake_amount = global.screen_shake_intensity * _shake_progress;
+    var _shake_x = round(random_range(-_shake_amount, _shake_amount));
+    var _shake_y = round(random_range(-_shake_amount, _shake_amount));
+
+    if (variable_global_exists("screen_shake_camera")) {
+        camera_set_view_pos(
+            global.screen_shake_camera,
+            global.screen_shake_camera_base_x + _shake_x,
+            global.screen_shake_camera_base_y + _shake_y
+        );
+    }
+
+    global.screen_shake_timer -= 1;
+} else {
+    global.screen_shake_timer = 0;
+    if (variable_global_exists("screen_shake_camera")) {
+        camera_set_view_pos(
+            global.screen_shake_camera,
+            global.screen_shake_camera_base_x,
+            global.screen_shake_camera_base_y
+        );
+    }
+}
 
 var _result_active = global.game_cleared || global.game_over;
 
 if (_result_active) {
     scr_set_game_paused(false);
+
+    var _result_sound_state = global.game_cleared ? 1 : 2;
+    if (!variable_instance_exists(id, "result_popup_sound_state")) result_popup_sound_state = 0;
+
+    if (result_popup_sound_state != _result_sound_state) {
+        result_popup_sound_state = _result_sound_state;
+        scr_play_sfx(global.game_cleared ? sfx_gameclear : sfx_gameover);
+    }
 }
 
 if (_result_active) {
@@ -53,6 +92,10 @@ if (_result_active) {
     }
 
     exit;
+}
+
+if (variable_instance_exists(id, "result_popup_sound_state")) {
+    result_popup_sound_state = 0;
 }
 
 var _escape_pressed = keyboard_check_pressed(vk_escape);

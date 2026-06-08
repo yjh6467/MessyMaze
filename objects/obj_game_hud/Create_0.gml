@@ -10,6 +10,7 @@ if (instance_number(obj_game_hud) > 1) {
 
 hud_start_time_ms = current_time;
 hud_elapsed_frames = 0;
+result_popup_sound_state = 0;
 
 if (!variable_global_exists("elapsed_time")) global.elapsed_time = 0;
 if (!variable_global_exists("game_paused")) global.game_paused = false;

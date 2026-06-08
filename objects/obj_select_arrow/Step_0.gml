@@ -59,10 +59,9 @@ if (variable_global_exists("option_open") && global.option_open) {
             global.bgm_volume = _value;
         } else {
             global.sfx_volume = _value;
-            audio_sound_gain(sfx_vacuum, global.sfx_volume, 0);
-            audio_sound_gain(sfx_vacuum_warning, global.sfx_volume, 0);
-            audio_sound_gain(sfx_boom_explosion, global.sfx_volume, 0);
         }
+
+        scr_apply_audio_volumes();
     }
 
     if (!_held) {
@@ -71,6 +70,8 @@ if (variable_global_exists("option_open") && global.option_open) {
 
     exit;
 }
+
+var _previous_selected_index = selected_index;
 
 if (keyboard_check_pressed(vk_up)) {
     selected_index = max(0, selected_index - 1);
@@ -133,9 +134,14 @@ if (_mouse_pressed) {
     }
 }
 
+if (selected_index != _previous_selected_index) {
+    scr_play_sfx(sfx_select_arrow_move);
+}
+
 if (keyboard_check_pressed(vk_enter) || _button_clicked) {
     switch (selected_index) {
         case 0:
+            scr_play_sfx(sfx_gamestart);
             room_goto(Maze);
             break;
 

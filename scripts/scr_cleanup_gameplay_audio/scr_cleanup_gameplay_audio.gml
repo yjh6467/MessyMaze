@@ -7,4 +7,6 @@ function scr_cleanup_gameplay_audio() {
 
     audio_stop_sound(sfx_vacuum);
     audio_stop_sound(sfx_vacuum_warning);
+    audio_stop_sound(sfx_gameclear);
+    audio_stop_sound(sfx_gameover);
 }
