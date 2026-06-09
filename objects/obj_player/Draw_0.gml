@@ -3,7 +3,7 @@ draw_self();
 if (invisible_timer > 0) {
     draw_set_alpha(0.35);
     draw_set_color(c_aqua);
-    draw_circle(x + 16, y + 16, 22, false);
+    draw_circle(scr_instance_center_x(id), scr_instance_center_y(id), 22, false);
     draw_set_alpha(1);
 }
 

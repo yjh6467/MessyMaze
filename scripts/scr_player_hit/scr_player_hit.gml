@@ -14,7 +14,7 @@ function scr_player_hit(_reason) {
             global.player_lives = max(0, global.player_lives - 1);
             if (global.player_lives <= 0) {
                 global.game_over = true;
-                show_debug_message("GAME OVER");
+                scr_debug_log("GAME OVER");
                 exit;
             }
 

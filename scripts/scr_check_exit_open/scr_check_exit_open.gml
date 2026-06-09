@@ -37,7 +37,7 @@ function scr_check_exit_open() {
         instance_create_layer(global.clear_exit_x, global.clear_exit_y, "Instances", obj_clear_exit);
     }
 
-    show_debug_message("Exit opened!");
+    scr_debug_log("Exit opened!");
 
     // Test difficulty opens the exit immediately, but the player still has to reach it.
 }

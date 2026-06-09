@@ -2,6 +2,7 @@ if (!variable_global_exists("option_open")) global.option_open = false;
 if (!variable_global_exists("bgm_volume")) global.bgm_volume = 0.5;
 if (!variable_global_exists("sfx_volume")) global.sfx_volume = 0.5;
 if (!variable_global_exists("difficulty")) global.difficulty = 2;
+if (!variable_global_exists("debug_logging")) global.debug_logging = false;
 global.screen_shake_timer = 0;
 global.screen_shake_duration = 0;
 global.screen_shake_intensity = 0;

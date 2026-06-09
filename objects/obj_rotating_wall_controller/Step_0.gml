@@ -18,10 +18,10 @@ for (var _i = 0; _i < array_length(_rotating_wall_objects); _i += 1) {
         }
         image_angle = 0;
 
-        var _half_w = sprite_get_width(sprite_index) * abs(image_xscale) * 0.5;
-        var _half_h = sprite_get_height(sprite_index) * abs(image_yscale) * 0.5;
-        var _piece_x = x + _half_w;
-        var _piece_y = y + _half_h;
+        var _half_w = scr_instance_width(id) * 0.5;
+        var _half_h = scr_instance_height(id) * 0.5;
+        var _piece_x = scr_instance_center_x(id);
+        var _piece_y = scr_instance_center_y(id);
         if (
             !variable_instance_exists(id, "rotation_center")
             || rotation_center == noone
@@ -34,7 +34,7 @@ for (var _i = 0; _i < array_length(_rotating_wall_objects); _i += 1) {
 
             for (var _center_i = 0; _center_i < array_length(_rotating_centers); _center_i += 1) {
                 var _test_center = _rotating_centers[_center_i];
-                var _test_distance = point_distance(_piece_x, _piece_y, _test_center.x + 16, _test_center.y + 16);
+                var _test_distance = point_distance(_piece_x, _piece_y, scr_instance_center_x(_test_center), scr_instance_center_y(_test_center));
 
                 if (_test_distance < _nearest_distance) {
                     _nearest_distance = _test_distance;
@@ -45,8 +45,8 @@ for (var _i = 0; _i < array_length(_rotating_wall_objects); _i += 1) {
         }
 
         if (rotation_center != noone) {
-            var _pivot_x = rotation_center.x + 16;
-            var _pivot_y = rotation_center.y + 16;
+            var _pivot_x = scr_instance_center_x(rotation_center);
+            var _pivot_y = scr_instance_center_y(rotation_center);
             var _distance = rotation_radius;
             var _direction = point_direction(_pivot_x, _pivot_y, _piece_x, _piece_y) - other.rotation_speed;
 

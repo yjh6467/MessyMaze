@@ -101,7 +101,7 @@
     {"id":{"name":"obj_monster_respawner","path":"objects/obj_monster_respawner/obj_monster_respawner.yy",},"order":19,},
     {"id":{"name":"obj_wall_north","path":"objects/obj_wall_north/obj_wall_north.yy",},"order":9,},
     {"id":{"name":"spr_boom1","path":"sprites/spr_boom1/spr_boom1.yy",},"order":0,},
-    {"id":{"name":"spr_wall_open_wast","path":"sprites/spr_wall_open_wast/spr_wall_open_wast.yy",},"order":13,},
+    {"id":{"name":"spr_wall_open_west","path":"sprites/spr_wall_open_west/spr_wall_open_west.yy",},"order":13,},
     {"id":{"name":"obj_wall_parent","path":"objects/obj_wall_parent/obj_wall_parent.yy",},"order":0,},
     {"id":{"name":"spr_wall_north","path":"sprites/spr_wall_north/spr_wall_north.yy",},"order":7,},
     {"id":{"name":"obj_wall_vertical","path":"objects/obj_wall_vertical/obj_wall_vertical.yy",},"order":1,},

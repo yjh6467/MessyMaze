@@ -49,6 +49,7 @@ if (_result_active) {
 
     if (result_popup_sound_state != _result_sound_state) {
         result_popup_sound_state = _result_sound_state;
+        scr_cleanup_gameplay_audio();
         scr_play_sfx(global.game_cleared ? sfx_gameclear : sfx_gameover);
     }
 }

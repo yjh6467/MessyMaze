@@ -1,6 +1,7 @@
 function scr_set_game_paused(_paused) {
     if (!variable_global_exists("game_paused")) global.game_paused = false;
     if (!variable_global_exists("gameplay_frozen")) global.gameplay_frozen = false;
+    if (!variable_global_exists("audio_paused_by_game")) global.audio_paused_by_game = false;
 
     var _result_active =
         (variable_global_exists("game_cleared") && global.game_cleared)
@@ -57,9 +58,11 @@ function scr_set_game_paused(_paused) {
         }
     }
 
-    if (global.gameplay_frozen) {
+    if (_next_paused && !global.audio_paused_by_game) {
         audio_pause_all();
-    } else {
+        global.audio_paused_by_game = true;
+    } else if (!_next_paused && global.audio_paused_by_game) {
         audio_resume_all();
+        global.audio_paused_by_game = false;
     }
 }

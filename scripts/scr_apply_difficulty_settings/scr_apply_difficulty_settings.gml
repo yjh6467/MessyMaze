@@ -128,10 +128,10 @@ function scr_apply_difficulty_settings() {
         scr_apply_infinite_difficulty(0, true);
     }
 
-    show_debug_message("Difficulty Applied: " + _difficulty_name);
-    show_debug_message("Bomb interval: " + string(global.bomb_spawn_interval));
-    show_debug_message("Bomb spawn radius: " + string(global.bomb_spawn_radius));
-    show_debug_message("Bomb explosion radius: " + string(global.bomb_radius));
-    show_debug_message("Rocket interval: " + string(global.rocket_spawn_interval));
-    show_debug_message("Monster chase speed: " + string(global.monster_chase_speed));
+    scr_debug_log("Difficulty Applied: " + _difficulty_name);
+    scr_debug_log("Bomb interval: " + string(global.bomb_spawn_interval));
+    scr_debug_log("Bomb spawn radius: " + string(global.bomb_spawn_radius));
+    scr_debug_log("Bomb explosion radius: " + string(global.bomb_radius));
+    scr_debug_log("Rocket interval: " + string(global.rocket_spawn_interval));
+    scr_debug_log("Monster chase speed: " + string(global.monster_chase_speed));
 }

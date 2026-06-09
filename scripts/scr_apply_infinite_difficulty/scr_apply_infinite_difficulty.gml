@@ -97,7 +97,7 @@ function scr_apply_infinite_difficulty(_minute, _force) {
         move_speed = variable_global_exists("giant_vacuum_speed") ? global.giant_vacuum_speed : move_speed;
     }
 
-    show_debug_message(
+    scr_debug_log(
         "Infinite difficulty tier: "
         + string(_tier)
         + " / bomb "

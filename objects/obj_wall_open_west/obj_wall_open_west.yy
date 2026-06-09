@@ -3,8 +3,8 @@
   "resourceVersion": "1.0",
   "name": "obj_wall_open_west",
   "spriteId": {
-    "name": "spr_wall_open_wast",
-    "path": "sprites/spr_wall_open_wast/spr_wall_open_wast.yy",
+    "name": "spr_wall_open_west",
+    "path": "sprites/spr_wall_open_west/spr_wall_open_west.yy",
   },
   "solid": false,
   "visible": true,

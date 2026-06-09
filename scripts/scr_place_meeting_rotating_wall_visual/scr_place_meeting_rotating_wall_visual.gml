@@ -2,13 +2,12 @@ function scr_place_meeting_rotating_wall_visual(_test_x, _test_y) {
     var _target_wall = argument_count > 2 ? argument[2] : noone;
     var _target_instance = argument_count > 3 ? argument[3] : id;
 
-    var _target_sprite = _target_instance.sprite_index;
-    var _target_xscale = abs(_target_instance.image_xscale);
-    var _target_yscale = abs(_target_instance.image_yscale);
-    var _player_left = _test_x + sprite_get_bbox_left(_target_sprite) * _target_xscale;
-    var _player_right = _test_x + (sprite_get_bbox_right(_target_sprite) + 1) * _target_xscale;
-    var _player_top = _test_y + sprite_get_bbox_top(_target_sprite) * _target_yscale;
-    var _player_bottom = _test_y + (sprite_get_bbox_bottom(_target_sprite) + 1) * _target_yscale;
+    if (_target_instance == noone || !instance_exists(_target_instance)) return false;
+
+    var _player_left = scr_instance_bbox_left_at(_target_instance, _test_x);
+    var _player_right = scr_instance_bbox_right_at(_target_instance, _test_x);
+    var _player_top = scr_instance_bbox_top_at(_target_instance, _test_y);
+    var _player_bottom = scr_instance_bbox_bottom_at(_target_instance, _test_y);
 
     if (_target_wall != noone) {
         return scr_rotating_wall_visual_intersects_bounds(_player_left, _player_right, _player_top, _player_bottom, _target_wall);
@@ -24,11 +23,61 @@ function scr_place_meeting_rotating_wall_visual(_test_x, _test_y) {
     return false;
 }
 
+function scr_debug_log(_message) {
+    if (variable_global_exists("debug_logging") && global.debug_logging) {
+        show_debug_message(_message);
+    }
+}
+
+function scr_instance_width(_inst) {
+    return sprite_get_width(_inst.sprite_index) * abs(_inst.image_xscale);
+}
+
+function scr_instance_height(_inst) {
+    return sprite_get_height(_inst.sprite_index) * abs(_inst.image_yscale);
+}
+
+function scr_instance_center_x(_inst) {
+    return _inst.x + scr_instance_width(_inst) * 0.5;
+}
+
+function scr_instance_center_y(_inst) {
+    return _inst.y + scr_instance_height(_inst) * 0.5;
+}
+
+function scr_instance_bbox_left_at(_inst, _x) {
+    return _x + sprite_get_bbox_left(_inst.sprite_index) * abs(_inst.image_xscale);
+}
+
+function scr_instance_bbox_right_at(_inst, _x) {
+    return _x + (sprite_get_bbox_right(_inst.sprite_index) + 1) * abs(_inst.image_xscale);
+}
+
+function scr_instance_bbox_top_at(_inst, _y) {
+    return _y + sprite_get_bbox_top(_inst.sprite_index) * abs(_inst.image_yscale);
+}
+
+function scr_instance_bbox_bottom_at(_inst, _y) {
+    return _y + (sprite_get_bbox_bottom(_inst.sprite_index) + 1) * abs(_inst.image_yscale);
+}
+
+function scr_instances_need_rebuild(_instances) {
+    for (var _i = 0; _i < array_length(_instances); _i += 1) {
+        if (_instances[_i] == noone || !instance_exists(_instances[_i])) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 function scr_rotating_wall_visual_intersects_bounds(_player_left, _player_right, _player_top, _player_bottom, _wall) {
-    var _wall_w = sprite_get_width(_wall.sprite_index) * abs(_wall.image_xscale);
-    var _wall_h = sprite_get_height(_wall.sprite_index) * abs(_wall.image_yscale);
-    var _wall_cx = _wall.x + _wall_w * 0.5;
-    var _wall_cy = _wall.y + _wall_h * 0.5;
+    if (_wall == noone || !instance_exists(_wall)) return false;
+
+    var _wall_w = scr_instance_width(_wall);
+    var _wall_h = scr_instance_height(_wall);
+    var _wall_cx = scr_instance_center_x(_wall);
+    var _wall_cy = scr_instance_center_y(_wall);
     var _wall_angle = variable_instance_exists(_wall, "visual_angle") ? _wall.visual_angle : _wall.image_angle;
     var _corner_distance = point_distance(0, 0, _wall_w * 0.5, _wall_h * 0.5);
     var _d1 = point_direction(0, 0, -_wall_w * 0.5, -_wall_h * 0.5) + _wall_angle;
@@ -106,10 +155,15 @@ function scr_rebuild_rotating_wall_instances() {
 }
 
 function scr_get_rotating_wall_instances() {
-    var _needs_rebuild =
-        !variable_global_exists("rotating_wall_instances")
-        || !variable_global_exists("rotating_wall_instances_room")
-        || global.rotating_wall_instances_room != room;
+    var _needs_rebuild = true;
+
+    if (
+        variable_global_exists("rotating_wall_instances")
+        && variable_global_exists("rotating_wall_instances_room")
+        && global.rotating_wall_instances_room == room
+    ) {
+        _needs_rebuild = scr_instances_need_rebuild(global.rotating_wall_instances);
+    }
 
     if (_needs_rebuild) {
         scr_rebuild_rotating_wall_instances();
@@ -128,10 +182,15 @@ function scr_rebuild_rotating_wall_centers() {
 }
 
 function scr_get_rotating_wall_centers() {
-    var _needs_rebuild =
-        !variable_global_exists("rotating_wall_centers")
-        || !variable_global_exists("rotating_wall_centers_room")
-        || global.rotating_wall_centers_room != room;
+    var _needs_rebuild = true;
+
+    if (
+        variable_global_exists("rotating_wall_centers")
+        && variable_global_exists("rotating_wall_centers_room")
+        && global.rotating_wall_centers_room == room
+    ) {
+        _needs_rebuild = scr_instances_need_rebuild(global.rotating_wall_centers);
+    }
 
     if (_needs_rebuild) {
         scr_rebuild_rotating_wall_centers();
@@ -163,10 +222,15 @@ function scr_rebuild_static_wall_instances() {
 }
 
 function scr_get_static_wall_instances() {
-    var _needs_rebuild =
-        !variable_global_exists("static_wall_instances")
-        || !variable_global_exists("static_wall_instances_room")
-        || global.static_wall_instances_room != room;
+    var _needs_rebuild = true;
+
+    if (
+        variable_global_exists("static_wall_instances")
+        && variable_global_exists("static_wall_instances_room")
+        && global.static_wall_instances_room == room
+    ) {
+        _needs_rebuild = scr_instances_need_rebuild(global.static_wall_instances);
+    }
 
     if (_needs_rebuild) {
         scr_rebuild_static_wall_instances();
@@ -187,14 +251,10 @@ function scr_rotating_wall_push_instance(_target, _wall, _crush_reason) {
     var _target_y = _target.y;
     if (!scr_place_meeting_rotating_wall_visual(_target_x, _target_y, _wall, _target)) return false;
 
-    var _target_half_w = sprite_get_width(_target.sprite_index) * abs(_target.image_xscale) * 0.5;
-    var _target_half_h = sprite_get_height(_target.sprite_index) * abs(_target.image_yscale) * 0.5;
-    var _wall_half_w = sprite_get_width(_wall.sprite_index) * abs(_wall.image_xscale) * 0.5;
-    var _wall_half_h = sprite_get_height(_wall.sprite_index) * abs(_wall.image_yscale) * 0.5;
-    var _wall_center_x = _wall.x + _wall_half_w;
-    var _wall_center_y = _wall.y + _wall_half_h;
-    var _target_center_x = _target_x + _target_half_w;
-    var _target_center_y = _target_y + _target_half_h;
+    var _wall_center_x = scr_instance_center_x(_wall);
+    var _wall_center_y = scr_instance_center_y(_wall);
+    var _target_center_x = _target_x + scr_instance_width(_target) * 0.5;
+    var _target_center_y = _target_y + scr_instance_height(_target) * 0.5;
     var _push_dir = point_direction(_wall_center_x, _wall_center_y, _target_center_x, _target_center_y);
 
     if (point_distance(_wall_center_x, _wall_center_y, _target_center_x, _target_center_y) <= 0) {
@@ -220,15 +280,16 @@ function scr_rotating_wall_push_instance(_target, _wall, _crush_reason) {
         }
 
         var _blocked_by_wall = false;
-        var _target_test_left = _target.x + _push_step_x + sprite_get_bbox_left(_target.sprite_index) * abs(_target.image_xscale);
-        var _target_test_right = _target.x + _push_step_x + (sprite_get_bbox_right(_target.sprite_index) + 1) * abs(_target.image_xscale);
-        var _target_test_top = _target.y + _push_step_y + sprite_get_bbox_top(_target.sprite_index) * abs(_target.image_yscale);
-        var _target_test_bottom = _target.y + _push_step_y + (sprite_get_bbox_bottom(_target.sprite_index) + 1) * abs(_target.image_yscale);
+        var _target_test_left = scr_instance_bbox_left_at(_target, _target.x + _push_step_x);
+        var _target_test_right = scr_instance_bbox_right_at(_target, _target.x + _push_step_x);
+        var _target_test_top = scr_instance_bbox_top_at(_target, _target.y + _push_step_y);
+        var _target_test_bottom = scr_instance_bbox_bottom_at(_target, _target.y + _push_step_y);
 
         var _static_walls = scr_get_static_wall_instances();
         for (var _wall_i = 0; _wall_i < array_length(_static_walls); _wall_i += 1) {
             var _block_wall = _static_walls[_wall_i];
             if (_block_wall == _wall) continue;
+            if (_block_wall == noone || !instance_exists(_block_wall)) continue;
 
             if (collision_rectangle(_target_test_left, _target_test_top, _target_test_right, _target_test_bottom, _block_wall, false, true) != noone) {
                 _blocked_by_wall = true;

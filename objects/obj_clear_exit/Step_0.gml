@@ -27,6 +27,6 @@ if (instance_exists(obj_player)) {
 
     if (_near_exit || _inside_exit_area) {
         global.game_cleared = true;
-        show_debug_message("GAME CLEAR");
+        scr_debug_log("GAME CLEAR");
     }
 }

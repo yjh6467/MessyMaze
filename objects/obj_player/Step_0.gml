@@ -13,7 +13,7 @@ if (is_dead) {
 
         if (global.player_lives <= 0) {
             global.game_over = true;
-            show_debug_message("GAME OVER");
+            scr_debug_log("GAME OVER");
         } else {
             x = spawn_x;
             y = spawn_y;

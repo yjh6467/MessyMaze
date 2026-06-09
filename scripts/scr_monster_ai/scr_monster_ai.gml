@@ -24,15 +24,15 @@ function scr_monster_place_meeting_rotating_wall(_test_x, _test_y) {
 }
 
 function scr_monster_in_rotating_wall_zone(_test_x, _test_y) {
-    var _cx = _test_x + sprite_get_width(sprite_index) * abs(image_xscale) * 0.5;
-    var _cy = _test_y + sprite_get_height(sprite_index) * abs(image_yscale) * 0.5;
+    var _cx = _test_x + scr_instance_width(id) * 0.5;
+    var _cy = _test_y + scr_instance_height(id) * 0.5;
     var _radius = variable_instance_exists(id, "rotating_avoid_radius") ? rotating_avoid_radius : 128;
     var _rotating_centers = scr_get_rotating_wall_centers();
 
     for (var _i = 0; _i < array_length(_rotating_centers); _i += 1) {
         var _center = _rotating_centers[_i];
-        var _center_cx = _center.x + sprite_get_width(_center.sprite_index) * abs(_center.image_xscale) * 0.5;
-        var _center_cy = _center.y + sprite_get_height(_center.sprite_index) * abs(_center.image_yscale) * 0.5;
+        var _center_cx = scr_instance_center_x(_center);
+        var _center_cy = scr_instance_center_y(_center);
 
         if (point_distance(_cx, _cy, _center_cx, _center_cy) < _radius) {
             return true;
@@ -60,13 +60,14 @@ function scr_monster_in_spawn_room() {
 
 function scr_monster_can_see_player() {
     if (!instance_exists(obj_player)) return false;
-    if (obj_player.is_dead) return false;
-    if (obj_player.invisible_timer > 0) return false;
+    var _player = instance_find(obj_player, 0);
+    if (_player.is_dead) return false;
+    if (_player.invisible_timer > 0) return false;
 
-    var _from_x = x + sprite_get_width(sprite_index) * abs(image_xscale) * 0.5;
-    var _from_y = y + sprite_get_height(sprite_index) * abs(image_yscale) * 0.5;
-    var _to_x = obj_player.x + sprite_get_width(obj_player.sprite_index) * abs(obj_player.image_xscale) * 0.5;
-    var _to_y = obj_player.y + sprite_get_height(obj_player.sprite_index) * abs(obj_player.image_yscale) * 0.5;
+    var _from_x = scr_instance_center_x(id);
+    var _from_y = scr_instance_center_y(id);
+    var _to_x = scr_instance_center_x(_player);
+    var _to_y = scr_instance_center_y(_player);
     var _distance = point_distance(_from_x, _from_y, _to_x, _to_y);
 
     if (_distance > sight_radius) return false;
@@ -85,8 +86,8 @@ function scr_monster_can_see_player() {
         var _sample_x = lerp(_from_x, _to_x, _i / _samples);
         var _sample_y = lerp(_from_y, _to_y, _i / _samples);
 
-        if (scr_monster_place_meeting_rotating_wall(_sample_x - 16, _sample_y - 16)) return false;
-        if (scr_monster_in_rotating_wall_zone(_sample_x - 16, _sample_y - 16)) return false;
+        if (scr_monster_place_meeting_rotating_wall(_sample_x - scr_instance_width(id) * 0.5, _sample_y - scr_instance_height(id) * 0.5)) return false;
+        if (scr_monster_in_rotating_wall_zone(_sample_x - scr_instance_width(id) * 0.5, _sample_y - scr_instance_height(id) * 0.5)) return false;
     }
 
     return true;
@@ -138,7 +139,7 @@ function scr_monster_start_escape() {
     escape_spawn_room = true;
     escape_mode = 0;
     escape_timer = 240;
-    escape_target_x = 784;
+    escape_target_x = variable_global_exists("monster_escape_target_x") ? global.monster_escape_target_x : room_width * 0.5 - tile_size * 0.5;
     escape_side_target_x = x;
     escape_side_dir = choose(-1, 1);
     dir_x = 0;
@@ -305,7 +306,7 @@ function scr_monster_ai_init(_idle_sprite, _walk_left_sprite, _walk_right_sprite
     chase_memory_max = variable_global_exists("monster_chase_memory") ? global.monster_chase_memory : 45;
     spawn_x = x;
     spawn_y = y;
-    escape_target_x = 784;
+    escape_target_x = variable_global_exists("monster_escape_target_x") ? global.monster_escape_target_x : room_width * 0.5 - tile_size * 0.5;
     spawn_room_left = escape_target_x - tile_size * 2.5;
     spawn_room_right = escape_target_x + tile_size * 2.5;
     spawn_room_top = spawn_y - tile_size * 2;
