@@ -5,11 +5,10 @@ function scr_monster_is_rotating_wall_object(_object_index) {
 function scr_monster_place_meeting_static_wall(_test_x, _test_y) {
     var _old_mask = mask_index;
     mask_index = spr_player_right;
+    var _static_walls = scr_get_static_wall_instances();
 
-    for (var _wall_i = 0; _wall_i < instance_number(obj_wall_parent); _wall_i += 1) {
-        var _wall = instance_find(obj_wall_parent, _wall_i);
-        if (scr_monster_is_rotating_wall_object(_wall.object_index)) continue;
-
+    for (var _wall_i = 0; _wall_i < array_length(_static_walls); _wall_i += 1) {
+        var _wall = _static_walls[_wall_i];
         if (place_meeting(_test_x, _test_y, _wall)) {
             mask_index = _old_mask;
             return true;
@@ -84,10 +83,9 @@ function scr_monster_can_see_player() {
     if (_distance > sight_radius) return false;
     if (scr_monster_in_rotating_wall_zone(x, y)) return false;
 
-    for (var _wall_i = 0; _wall_i < instance_number(obj_wall_parent); _wall_i += 1) {
-        var _wall = instance_find(obj_wall_parent, _wall_i);
-        if (scr_monster_is_rotating_wall_object(_wall.object_index)) continue;
-
+    var _static_walls = scr_get_static_wall_instances();
+    for (var _wall_i = 0; _wall_i < array_length(_static_walls); _wall_i += 1) {
+        var _wall = _static_walls[_wall_i];
         if (collision_line(_from_x, _from_y, _to_x, _to_y, _wall, false, true) != noone) {
             return false;
         }

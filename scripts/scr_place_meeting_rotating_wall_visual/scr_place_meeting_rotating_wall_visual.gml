@@ -164,6 +164,40 @@ function scr_is_rotating_wall_object(_object_index) {
         || _object_index == obj_rotating_wall_center;
 }
 
+function scr_rebuild_static_wall_instances() {
+    global.static_wall_instances = [];
+    global.static_wall_instances_room = room;
+
+    for (var _wall_i = 0; _wall_i < instance_number(obj_wall_parent); _wall_i += 1) {
+        var _wall = instance_find(obj_wall_parent, _wall_i);
+        if (scr_is_rotating_wall_object(_wall.object_index)) continue;
+
+        array_push(global.static_wall_instances, _wall);
+    }
+}
+
+function scr_get_static_wall_instances() {
+    var _needs_rebuild =
+        !variable_global_exists("static_wall_instances")
+        || !variable_global_exists("static_wall_instances_room")
+        || global.static_wall_instances_room != room;
+
+    if (!_needs_rebuild) {
+        for (var _wall_i = 0; _wall_i < array_length(global.static_wall_instances); _wall_i += 1) {
+            if (!instance_exists(global.static_wall_instances[_wall_i])) {
+                _needs_rebuild = true;
+                break;
+            }
+        }
+    }
+
+    if (_needs_rebuild) {
+        scr_rebuild_static_wall_instances();
+    }
+
+    return global.static_wall_instances;
+}
+
 function scr_rotating_wall_push_instance(_target, _wall, _crush_reason) {
     if (_target == noone || _wall == noone) return false;
     if (!instance_exists(_target) || !instance_exists(_wall)) return false;
@@ -206,10 +240,10 @@ function scr_rotating_wall_push_instance(_target, _wall, _crush_reason) {
         var _target_test_top = _target.y + _push_step_y + sprite_get_bbox_top(_target.sprite_index) * abs(_target.image_yscale);
         var _target_test_bottom = _target.y + _push_step_y + (sprite_get_bbox_bottom(_target.sprite_index) + 1) * abs(_target.image_yscale);
 
-        for (var _wall_i = 0; _wall_i < instance_number(obj_wall_parent); _wall_i += 1) {
-            var _block_wall = instance_find(obj_wall_parent, _wall_i);
+        var _static_walls = scr_get_static_wall_instances();
+        for (var _wall_i = 0; _wall_i < array_length(_static_walls); _wall_i += 1) {
+            var _block_wall = _static_walls[_wall_i];
             if (_block_wall == _wall) continue;
-            if (scr_is_rotating_wall_object(_block_wall.object_index)) continue;
 
             if (collision_rectangle(_target_test_left, _target_test_top, _target_test_right, _target_test_bottom, _block_wall, false, true) != noone) {
                 _blocked_by_wall = true;
