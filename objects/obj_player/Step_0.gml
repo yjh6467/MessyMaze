@@ -21,6 +21,8 @@ if (is_dead) {
             death_timer = 0;
             dash_remaining = 0;
             dash_cooldown = 0;
+            move_remainder_x = 0;
+            move_remainder_y = 0;
             invisible_timer = 0;
             image_alpha = normal_image_alpha;
             image_speed = normal_image_speed;
@@ -194,8 +196,33 @@ if (dash_remaining > 0) {
     }
 }
 
-var _dx = round(_mx * _distance);
-var _dy = round(_my * _distance);
+var _raw_dx = _mx * _distance;
+var _raw_dy = _my * _distance;
+var _dx = 0;
+var _dy = 0;
+
+if (dash_remaining > 0) {
+    _dx = round(_raw_dx);
+    _dy = round(_raw_dy);
+} else {
+    if (_mx == 0) {
+        move_remainder_x = 0;
+        _dx = 0;
+    } else {
+        var _move_x = _raw_dx + move_remainder_x;
+        _dx = sign(_move_x) * floor(abs(_move_x));
+        move_remainder_x = _move_x - _dx;
+    }
+
+    if (_my == 0) {
+        move_remainder_y = 0;
+        _dy = 0;
+    } else {
+        var _move_y = _raw_dy + move_remainder_y;
+        _dy = sign(_move_y) * floor(abs(_move_y));
+        move_remainder_y = _move_y - _dy;
+    }
+}
 var _sx = sign(_dx);
 var _sy = sign(_dy);
 var _moved = false;

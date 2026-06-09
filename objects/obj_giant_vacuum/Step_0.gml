@@ -2,6 +2,11 @@ if (scr_pause_step_guard()) {
     exit;
 }
 
+if (!variable_instance_exists(id, "vacuum_sound") || !audio_is_playing(vacuum_sound)) {
+    vacuum_sound = audio_play_sound(sfx_vacuum, 10, false);
+}
+audio_sound_gain(vacuum_sound, variable_global_exists("sfx_volume") ? global.sfx_volume : 0.5, 0);
+
 y += move_speed;
 
 var _hit_left = x + hit_margin_x;
@@ -26,10 +31,6 @@ if (instance_exists(obj_player)) {
     var _player = collision_rectangle(_hit_left, _hit_top, _hit_right, _hit_bottom, obj_player, false, true);
     if (_player != noone) {
         if (!_player.is_dead && _player.invisible_timer <= 0) {
-            if (variable_instance_exists(id, "vacuum_sound")) {
-                audio_stop_sound(vacuum_sound);
-            }
-            audio_stop_sound(sfx_vacuum);
             scr_player_hit("giant_vacuum");
         }
     }

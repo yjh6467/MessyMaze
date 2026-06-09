@@ -29,7 +29,7 @@ function scr_apply_difficulty_settings() {
 
     global.tile_size = 32;
 
-    global.player_speed = 3;
+    global.player_speed = 2.6;
     global.player_dash_distance = 96;
     global.player_dash_speed = 12;
     global.player_dash_cooldown = 90;
