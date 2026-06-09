@@ -20,15 +20,12 @@ function scr_monster_place_meeting_static_wall(_test_x, _test_y) {
 }
 
 function scr_monster_place_meeting_rotating_wall(_test_x, _test_y) {
-    var _rotating_wall_objects = scr_get_rotating_wall_objects();
+    var _rotating_walls = scr_get_rotating_wall_instances();
 
-    for (var _i = 0; _i < array_length(_rotating_wall_objects); _i += 1) {
-        for (var _j = 0; _j < instance_number(_rotating_wall_objects[_i]); _j += 1) {
-            var _wall = instance_find(_rotating_wall_objects[_i], _j);
-
-            if (scr_place_meeting_rotating_wall_visual(_test_x, _test_y, _wall)) {
-                return true;
-            }
+    for (var _i = 0; _i < array_length(_rotating_walls); _i += 1) {
+        var _wall = _rotating_walls[_i];
+        if (scr_place_meeting_rotating_wall_visual(_test_x, _test_y, _wall)) {
+            return true;
         }
     }
 
@@ -39,9 +36,10 @@ function scr_monster_in_rotating_wall_zone(_test_x, _test_y) {
     var _cx = _test_x + sprite_get_width(sprite_index) * abs(image_xscale) * 0.5;
     var _cy = _test_y + sprite_get_height(sprite_index) * abs(image_yscale) * 0.5;
     var _radius = variable_instance_exists(id, "rotating_avoid_radius") ? rotating_avoid_radius : 128;
+    var _rotating_centers = scr_get_rotating_wall_centers();
 
-    for (var _i = 0; _i < instance_number(obj_rotating_wall_center); _i += 1) {
-        var _center = instance_find(obj_rotating_wall_center, _i);
+    for (var _i = 0; _i < array_length(_rotating_centers); _i += 1) {
+        var _center = _rotating_centers[_i];
         var _center_cx = _center.x + sprite_get_width(_center.sprite_index) * abs(_center.image_xscale) * 0.5;
         var _center_cy = _center.y + sprite_get_height(_center.sprite_index) * abs(_center.image_yscale) * 0.5;
 

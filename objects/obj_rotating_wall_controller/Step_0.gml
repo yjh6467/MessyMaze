@@ -30,9 +30,10 @@ for (var _i = 0; _i < array_length(_rotating_wall_objects); _i += 1) {
             rotation_center = noone;
             rotation_radius = 0;
             var _nearest_distance = 1000000000;
+            var _rotating_centers = scr_get_rotating_wall_centers();
 
-            for (var _center_i = 0; _center_i < instance_number(obj_rotating_wall_center); _center_i += 1) {
-                var _test_center = instance_find(obj_rotating_wall_center, _center_i);
+            for (var _center_i = 0; _center_i < array_length(_rotating_centers); _center_i += 1) {
+                var _test_center = _rotating_centers[_center_i];
                 var _test_distance = point_distance(_piece_x, _piece_y, _test_center.x + 16, _test_center.y + 16);
 
                 if (_test_distance < _nearest_distance) {
