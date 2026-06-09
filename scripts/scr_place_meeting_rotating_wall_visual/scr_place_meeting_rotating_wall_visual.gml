@@ -163,3 +163,70 @@ function scr_is_rotating_wall_object(_object_index) {
         || _object_index == obj_rotating_wall_open_west
         || _object_index == obj_rotating_wall_center;
 }
+
+function scr_rotating_wall_push_instance(_target, _wall, _crush_reason) {
+    if (_target == noone || _wall == noone) return false;
+    if (!instance_exists(_target) || !instance_exists(_wall)) return false;
+
+    var _target_x = _target.x;
+    var _target_y = _target.y;
+    if (!scr_place_meeting_rotating_wall_visual(_target_x, _target_y, _wall, _target)) return false;
+
+    var _target_half_w = sprite_get_width(_target.sprite_index) * abs(_target.image_xscale) * 0.5;
+    var _target_half_h = sprite_get_height(_target.sprite_index) * abs(_target.image_yscale) * 0.5;
+    var _wall_half_w = sprite_get_width(_wall.sprite_index) * abs(_wall.image_xscale) * 0.5;
+    var _wall_half_h = sprite_get_height(_wall.sprite_index) * abs(_wall.image_yscale) * 0.5;
+    var _wall_center_x = _wall.x + _wall_half_w;
+    var _wall_center_y = _wall.y + _wall_half_h;
+    var _target_center_x = _target_x + _target_half_w;
+    var _target_center_y = _target_y + _target_half_h;
+    var _push_dir = point_direction(_wall_center_x, _wall_center_y, _target_center_x, _target_center_y);
+
+    if (point_distance(_wall_center_x, _wall_center_y, _target_center_x, _target_center_y) <= 0) {
+        _push_dir = 0;
+    }
+
+    repeat (32) {
+        if (!instance_exists(_target) || !instance_exists(_wall)) return true;
+        if (!scr_place_meeting_rotating_wall_visual(_target.x, _target.y, _wall, _target)) return true;
+
+        var _push_step_x = round(lengthdir_x(1, _push_dir));
+        var _push_step_y = round(lengthdir_y(1, _push_dir));
+        if (_push_step_x == 0 && _push_step_y == 0) {
+            if (abs(lengthdir_x(1, _push_dir)) >= abs(lengthdir_y(1, _push_dir))) {
+                _push_step_x = sign(lengthdir_x(1, _push_dir));
+            } else {
+                _push_step_y = sign(lengthdir_y(1, _push_dir));
+            }
+        }
+
+        var _blocked_by_wall = false;
+        var _target_test_left = _target.x + _push_step_x + sprite_get_bbox_left(_target.sprite_index) * abs(_target.image_xscale);
+        var _target_test_right = _target.x + _push_step_x + (sprite_get_bbox_right(_target.sprite_index) + 1) * abs(_target.image_xscale);
+        var _target_test_top = _target.y + _push_step_y + sprite_get_bbox_top(_target.sprite_index) * abs(_target.image_yscale);
+        var _target_test_bottom = _target.y + _push_step_y + (sprite_get_bbox_bottom(_target.sprite_index) + 1) * abs(_target.image_yscale);
+
+        for (var _wall_i = 0; _wall_i < instance_number(obj_wall_parent); _wall_i += 1) {
+            var _block_wall = instance_find(obj_wall_parent, _wall_i);
+            if (_block_wall == _wall) continue;
+            if (scr_is_rotating_wall_object(_block_wall.object_index)) continue;
+
+            if (collision_rectangle(_target_test_left, _target_test_top, _target_test_right, _target_test_bottom, _block_wall, false, true) != noone) {
+                _blocked_by_wall = true;
+                break;
+            }
+        }
+
+        if (_blocked_by_wall) {
+            if (_crush_reason != "") {
+                scr_player_hit(_crush_reason);
+            }
+            return true;
+        }
+
+        _target.x += _push_step_x;
+        _target.y += _push_step_y;
+    }
+
+    return true;
+}

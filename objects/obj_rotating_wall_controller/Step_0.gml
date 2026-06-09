@@ -60,51 +60,7 @@ for (var _i = 0; _i < array_length(_rotating_wall_objects); _i += 1) {
 
             var _player = player_to_push;
             if (_player != noone) {
-                push_x = x + _half_w;
-                push_y = y + _half_h;
-
-                with (_player) {
-                    var _player_half_w = sprite_get_width(sprite_index) * abs(image_xscale) * 0.5;
-                    var _player_half_h = sprite_get_height(sprite_index) * abs(image_yscale) * 0.5;
-                    var _push_dir = point_direction(other.push_x, other.push_y, x + _player_half_w, y + _player_half_h);
-                    if (point_distance(other.push_x, other.push_y, x + _player_half_w, y + _player_half_h) <= 0) {
-                        _push_dir = 0;
-                    }
-
-                    repeat (32) {
-                        if (!scr_place_meeting_rotating_wall_visual(x, y, other.id)) break;
-
-                        var _push_step_x = round(lengthdir_x(1, _push_dir));
-                        var _push_step_y = round(lengthdir_y(1, _push_dir));
-                        if (_push_step_x == 0 && _push_step_y == 0) {
-                            if (abs(lengthdir_x(1, _push_dir)) >= abs(lengthdir_y(1, _push_dir))) {
-                                _push_step_x = sign(lengthdir_x(1, _push_dir));
-                            } else {
-                                _push_step_y = sign(lengthdir_y(1, _push_dir));
-                            }
-                        }
-                        var _blocked_by_wall = false;
-
-                        for (var _wall_i = 0; _wall_i < instance_number(obj_wall_parent); _wall_i += 1) {
-                            var _wall = instance_find(obj_wall_parent, _wall_i);
-                            if (_wall == other.id) continue;
-                            if (scr_is_rotating_wall_object(_wall.object_index)) continue;
-
-                            if (place_meeting(x + _push_step_x, y + _push_step_y, _wall)) {
-                                _blocked_by_wall = true;
-                                break;
-                            }
-                        }
-
-                        if (_blocked_by_wall) {
-                            scr_player_hit("rotating_wall_crush");
-                            break;
-                        }
-
-                        x += _push_step_x;
-                        y += _push_step_y;
-                    }
-                }
+                scr_rotating_wall_push_instance(_player, id, "rotating_wall_crush");
             }
         }
     }
