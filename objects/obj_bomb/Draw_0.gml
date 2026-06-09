@@ -6,15 +6,10 @@ if (bomb_state == BOMB_IDLE || bomb_state == BOMB_WARNING) {
     var _flash = (state_timer div 6) mod 2;
     draw_set_alpha(0.25);
     draw_set_color(c_red);
-    for (var _tx = -bomb_range_tiles; _tx <= bomb_range_tiles; _tx += 1) {
-        for (var _ty = -bomb_range_tiles; _ty <= bomb_range_tiles; _ty += 1) {
-            var _cell_cx = _cx + _tx * _tile;
-            var _cell_cy = _cy + _ty * _tile;
-
-            if (_tx * _tx + _ty * _ty <= bomb_range_tiles_sq) {
-                draw_rectangle(_cell_cx - _tile * 0.5, _cell_cy - _tile * 0.5, _cell_cx + _tile * 0.5, _cell_cy + _tile * 0.5, false);
-            }
-        }
+    for (var _i = 0; _i < array_length(bomb_range_offsets_x); _i += 1) {
+        var _cell_cx = _cx + bomb_range_offsets_x[_i] * _tile;
+        var _cell_cy = _cy + bomb_range_offsets_y[_i] * _tile;
+        draw_rectangle(_cell_cx - _tile * 0.5, _cell_cy - _tile * 0.5, _cell_cx + _tile * 0.5, _cell_cy + _tile * 0.5, false);
     }
     draw_set_alpha(1);
 
@@ -27,15 +22,10 @@ if (bomb_state == BOMB_IDLE || bomb_state == BOMB_WARNING) {
 if (bomb_state == BOMB_EXPLODE) {
     draw_set_alpha(0.45);
     draw_set_color(c_orange);
-    for (var _tx = -bomb_range_tiles; _tx <= bomb_range_tiles; _tx += 1) {
-        for (var _ty = -bomb_range_tiles; _ty <= bomb_range_tiles; _ty += 1) {
-            var _cell_cx = _cx + _tx * _tile;
-            var _cell_cy = _cy + _ty * _tile;
-
-            if (_tx * _tx + _ty * _ty <= bomb_range_tiles_sq) {
-                draw_rectangle(_cell_cx - _tile * 0.5, _cell_cy - _tile * 0.5, _cell_cx + _tile * 0.5, _cell_cy + _tile * 0.5, false);
-            }
-        }
+    for (var _i = 0; _i < array_length(bomb_range_offsets_x); _i += 1) {
+        var _cell_cx = _cx + bomb_range_offsets_x[_i] * _tile;
+        var _cell_cy = _cy + bomb_range_offsets_y[_i] * _tile;
+        draw_rectangle(_cell_cx - _tile * 0.5, _cell_cy - _tile * 0.5, _cell_cx + _tile * 0.5, _cell_cy + _tile * 0.5, false);
     }
     draw_set_alpha(1);
 

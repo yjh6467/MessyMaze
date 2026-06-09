@@ -21,6 +21,8 @@ if (is_dead) {
             death_timer = 0;
             dash_remaining = 0;
             dash_cooldown = 0;
+            move_remainder_x = 0;
+            move_remainder_y = 0;
             invisible_timer = 0;
             image_alpha = normal_image_alpha;
             image_speed = normal_image_speed;
@@ -61,16 +63,27 @@ var _collect_score_slime_pieces = function() {
         global.slime_count = floor(global.score / max(1, global.score_slime_piece_value));
 
         if (_is_infinite) {
-            var _respawner = instance_create_layer(_piece_x, _piece_y, _piece.layer, obj_slime_respawner);
-            _respawner.respawn_layer = _piece.layer;
-            _respawner.respawn_image_xscale = _piece.image_xscale;
-            _respawner.respawn_image_yscale = _piece.image_yscale;
-            _respawner.respawn_image_angle = _piece.image_angle;
-            _respawner.respawn_image_index = _piece.image_index;
-            _respawner.respawn_image_speed = _piece.image_speed;
-            _respawner.respawn_image_blend = _piece.image_blend;
-            _respawner.respawn_image_alpha = _piece.image_alpha;
-            _respawner.respawn_piece_depth = _piece.depth;
+            var _has_respawner = false;
+            for (var _respawner_i = 0; _respawner_i < instance_number(obj_slime_respawner); _respawner_i += 1) {
+                var _existing_respawner = instance_find(obj_slime_respawner, _respawner_i);
+                if (abs(_existing_respawner.respawn_x - _piece_x) < 0.5 && abs(_existing_respawner.respawn_y - _piece_y) < 0.5) {
+                    _has_respawner = true;
+                    break;
+                }
+            }
+
+            if (!_has_respawner) {
+                var _respawner = instance_create_layer(_piece_x, _piece_y, _piece.layer, obj_slime_respawner);
+                _respawner.respawn_layer = _piece.layer;
+                _respawner.respawn_image_xscale = _piece.image_xscale;
+                _respawner.respawn_image_yscale = _piece.image_yscale;
+                _respawner.respawn_image_angle = _piece.image_angle;
+                _respawner.respawn_image_index = _piece.image_index;
+                _respawner.respawn_image_speed = _piece.image_speed;
+                _respawner.respawn_image_blend = _piece.image_blend;
+                _respawner.respawn_image_alpha = _piece.image_alpha;
+                _respawner.respawn_piece_depth = _piece.depth;
+            }
         }
 
         with (_piece) {
@@ -86,15 +99,10 @@ var _collect_score_slime_pieces = function() {
 };
 
 var _place_meeting_static_wall = function(_test_x, _test_y) {
-    for (var _wall_i = 0; _wall_i < instance_number(obj_wall_parent); _wall_i += 1) {
-        var _wall = instance_find(obj_wall_parent, _wall_i);
-        if (_wall.object_index == obj_rotating_wall_horizontal) continue;
-        if (_wall.object_index == obj_rotating_wall_vertical) continue;
-        if (_wall.object_index == obj_rotating_wall_north) continue;
-        if (_wall.object_index == obj_rotating_wall_east) continue;
-        if (_wall.object_index == obj_rotating_wall_open_south) continue;
-        if (_wall.object_index == obj_rotating_wall_open_west) continue;
+    var _static_walls = scr_get_static_wall_instances();
 
+    for (var _wall_i = 0; _wall_i < array_length(_static_walls); _wall_i += 1) {
+        var _wall = _static_walls[_wall_i];
         if (place_meeting(_test_x, _test_y, _wall)) {
             return true;
         }
@@ -109,93 +117,15 @@ var _place_meeting_static_wall = function(_test_x, _test_y) {
 };
 
 var _place_meeting_rotating_wall = function(_test_x, _test_y) {
-    var _rotating_wall_objects = [
-        obj_rotating_wall_horizontal,
-        obj_rotating_wall_vertical,
-        obj_rotating_wall_north,
-        obj_rotating_wall_east,
-        obj_rotating_wall_open_south,
-        obj_rotating_wall_open_west
-    ];
-
-    for (var _i = 0; _i < array_length(_rotating_wall_objects); _i += 1) {
-        for (var _j = 0; _j < instance_number(_rotating_wall_objects[_i]); _j += 1) {
-            var _wall = instance_find(_rotating_wall_objects[_i], _j);
-
-            if (scr_place_meeting_rotating_wall_visual(_test_x, _test_y, _wall)) {
-                return true;
-            }
-        }
-    }
-
-    return false;
+    return scr_place_meeting_rotating_wall_visual(_test_x, _test_y);
 };
 
 var _push_out_of_rotating_walls = function() {
-    var _rotating_wall_objects = [
-        obj_rotating_wall_horizontal,
-        obj_rotating_wall_vertical,
-        obj_rotating_wall_north,
-        obj_rotating_wall_east,
-        obj_rotating_wall_open_south,
-        obj_rotating_wall_open_west
-    ];
+    var _rotating_walls = scr_get_rotating_wall_instances();
 
-    for (var _i = 0; _i < array_length(_rotating_wall_objects); _i += 1) {
-        for (var _j = 0; _j < instance_number(_rotating_wall_objects[_i]); _j += 1) {
-            var _wall = instance_find(_rotating_wall_objects[_i], _j);
-
-            if (!scr_place_meeting_rotating_wall_visual(x, y, _wall)) continue;
-
-            var _player_half_w = sprite_get_width(sprite_index) * abs(image_xscale) * 0.5;
-            var _player_half_h = sprite_get_height(sprite_index) * abs(image_yscale) * 0.5;
-            var _wall_half_w = sprite_get_width(_wall.sprite_index) * abs(_wall.image_xscale) * 0.5;
-            var _wall_half_h = sprite_get_height(_wall.sprite_index) * abs(_wall.image_yscale) * 0.5;
-            var _push_dir = point_direction(_wall.x + _wall_half_w, _wall.y + _wall_half_h, x + _player_half_w, y + _player_half_h);
-
-            if (point_distance(_wall.x + _wall_half_w, _wall.y + _wall_half_h, x + _player_half_w, y + _player_half_h) <= 0) {
-                _push_dir = 0;
-            }
-
-            repeat (32) {
-                if (!scr_place_meeting_rotating_wall_visual(x, y, _wall)) break;
-                var _push_step_x = round(lengthdir_x(1, _push_dir));
-                var _push_step_y = round(lengthdir_y(1, _push_dir));
-                if (_push_step_x == 0 && _push_step_y == 0) {
-                    if (abs(lengthdir_x(1, _push_dir)) >= abs(lengthdir_y(1, _push_dir))) {
-                        _push_step_x = sign(lengthdir_x(1, _push_dir));
-                    } else {
-                        _push_step_y = sign(lengthdir_y(1, _push_dir));
-                    }
-                }
-
-                var _blocked_by_wall = false;
-
-                for (var _wall_i = 0; _wall_i < instance_number(obj_wall_parent); _wall_i += 1) {
-                    var _block_wall = instance_find(obj_wall_parent, _wall_i);
-                    if (_block_wall.object_index == obj_rotating_wall_center) continue;
-                    if (_block_wall.object_index == obj_rotating_wall_horizontal) continue;
-                    if (_block_wall.object_index == obj_rotating_wall_vertical) continue;
-                    if (_block_wall.object_index == obj_rotating_wall_north) continue;
-                    if (_block_wall.object_index == obj_rotating_wall_east) continue;
-                    if (_block_wall.object_index == obj_rotating_wall_open_south) continue;
-                    if (_block_wall.object_index == obj_rotating_wall_open_west) continue;
-
-                    if (place_meeting(x + _push_step_x, y + _push_step_y, _block_wall)) {
-                        _blocked_by_wall = true;
-                        break;
-                    }
-                }
-
-                if (_blocked_by_wall) {
-                    scr_player_hit("rotating_wall_crush");
-                    break;
-                }
-
-                x += _push_step_x;
-                y += _push_step_y;
-            }
-        }
+    for (var _i = 0; _i < array_length(_rotating_walls); _i += 1) {
+        var _wall = _rotating_walls[_i];
+        scr_rotating_wall_push_instance(id, _wall, "rotating_wall_crush");
     }
 };
 
@@ -266,8 +196,33 @@ if (dash_remaining > 0) {
     }
 }
 
-var _dx = round(_mx * _distance);
-var _dy = round(_my * _distance);
+var _raw_dx = _mx * _distance;
+var _raw_dy = _my * _distance;
+var _dx = 0;
+var _dy = 0;
+
+if (dash_remaining > 0) {
+    _dx = round(_raw_dx);
+    _dy = round(_raw_dy);
+} else {
+    if (_mx == 0) {
+        move_remainder_x = 0;
+        _dx = 0;
+    } else {
+        var _move_x = _raw_dx + move_remainder_x;
+        _dx = sign(_move_x) * floor(abs(_move_x));
+        move_remainder_x = _move_x - _dx;
+    }
+
+    if (_my == 0) {
+        move_remainder_y = 0;
+        _dy = 0;
+    } else {
+        var _move_y = _raw_dy + move_remainder_y;
+        _dy = sign(_move_y) * floor(abs(_move_y));
+        move_remainder_y = _move_y - _dy;
+    }
+}
 var _sx = sign(_dx);
 var _sy = sign(_dy);
 var _moved = false;

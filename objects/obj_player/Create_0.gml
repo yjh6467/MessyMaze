@@ -1,4 +1,6 @@
-move_speed = variable_global_exists("player_speed") ? global.player_speed : 3;
+move_speed = variable_global_exists("player_speed") ? global.player_speed : 2.6;
+move_remainder_x = 0;
+move_remainder_y = 0;
 dash_distance = variable_global_exists("player_dash_distance") ? global.player_dash_distance : 96;
 dash_speed = variable_global_exists("player_dash_speed") ? global.player_dash_speed : 12;
 dash_cooldown_max = variable_global_exists("player_dash_cooldown") ? global.player_dash_cooldown : 90;

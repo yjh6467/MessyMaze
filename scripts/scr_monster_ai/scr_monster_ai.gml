@@ -1,21 +1,14 @@
 function scr_monster_is_rotating_wall_object(_object_index) {
-    return _object_index == obj_rotating_wall_horizontal
-        || _object_index == obj_rotating_wall_vertical
-        || _object_index == obj_rotating_wall_north
-        || _object_index == obj_rotating_wall_east
-        || _object_index == obj_rotating_wall_open_south
-        || _object_index == obj_rotating_wall_open_west
-        || _object_index == obj_rotating_wall_center;
+    return scr_is_rotating_wall_object(_object_index);
 }
 
 function scr_monster_place_meeting_static_wall(_test_x, _test_y) {
     var _old_mask = mask_index;
     mask_index = spr_player_right;
+    var _static_walls = scr_get_static_wall_instances();
 
-    for (var _wall_i = 0; _wall_i < instance_number(obj_wall_parent); _wall_i += 1) {
-        var _wall = instance_find(obj_wall_parent, _wall_i);
-        if (scr_monster_is_rotating_wall_object(_wall.object_index)) continue;
-
+    for (var _wall_i = 0; _wall_i < array_length(_static_walls); _wall_i += 1) {
+        var _wall = _static_walls[_wall_i];
         if (place_meeting(_test_x, _test_y, _wall)) {
             mask_index = _old_mask;
             return true;
@@ -27,35 +20,17 @@ function scr_monster_place_meeting_static_wall(_test_x, _test_y) {
 }
 
 function scr_monster_place_meeting_rotating_wall(_test_x, _test_y) {
-    var _rotating_wall_objects = [
-        obj_rotating_wall_horizontal,
-        obj_rotating_wall_vertical,
-        obj_rotating_wall_north,
-        obj_rotating_wall_east,
-        obj_rotating_wall_open_south,
-        obj_rotating_wall_open_west
-    ];
-
-    for (var _i = 0; _i < array_length(_rotating_wall_objects); _i += 1) {
-        for (var _j = 0; _j < instance_number(_rotating_wall_objects[_i]); _j += 1) {
-            var _wall = instance_find(_rotating_wall_objects[_i], _j);
-
-            if (scr_place_meeting_rotating_wall_visual(_test_x, _test_y, _wall)) {
-                return true;
-            }
-        }
-    }
-
-    return false;
+    return scr_place_meeting_rotating_wall_visual(_test_x, _test_y);
 }
 
 function scr_monster_in_rotating_wall_zone(_test_x, _test_y) {
     var _cx = _test_x + sprite_get_width(sprite_index) * abs(image_xscale) * 0.5;
     var _cy = _test_y + sprite_get_height(sprite_index) * abs(image_yscale) * 0.5;
     var _radius = variable_instance_exists(id, "rotating_avoid_radius") ? rotating_avoid_radius : 128;
+    var _rotating_centers = scr_get_rotating_wall_centers();
 
-    for (var _i = 0; _i < instance_number(obj_rotating_wall_center); _i += 1) {
-        var _center = instance_find(obj_rotating_wall_center, _i);
+    for (var _i = 0; _i < array_length(_rotating_centers); _i += 1) {
+        var _center = _rotating_centers[_i];
         var _center_cx = _center.x + sprite_get_width(_center.sprite_index) * abs(_center.image_xscale) * 0.5;
         var _center_cy = _center.y + sprite_get_height(_center.sprite_index) * abs(_center.image_yscale) * 0.5;
 
@@ -97,10 +72,9 @@ function scr_monster_can_see_player() {
     if (_distance > sight_radius) return false;
     if (scr_monster_in_rotating_wall_zone(x, y)) return false;
 
-    for (var _wall_i = 0; _wall_i < instance_number(obj_wall_parent); _wall_i += 1) {
-        var _wall = instance_find(obj_wall_parent, _wall_i);
-        if (scr_monster_is_rotating_wall_object(_wall.object_index)) continue;
-
+    var _static_walls = scr_get_static_wall_instances();
+    for (var _wall_i = 0; _wall_i < array_length(_static_walls); _wall_i += 1) {
+        var _wall = _static_walls[_wall_i];
         if (collision_line(_from_x, _from_y, _to_x, _to_y, _wall, false, true) != noone) {
             return false;
         }
@@ -324,6 +298,9 @@ function scr_monster_ai_init(_idle_sprite, _walk_left_sprite, _walk_right_sprite
     walk_swap_left = choose(true, false);
     decision_interval = variable_global_exists("monster_direction_interval") ? global.monster_direction_interval : 18;
     decision_timer = irandom(decision_interval);
+    sight_check_interval = 5;
+    sight_check_timer = irandom(sight_check_interval);
+    sight_check_result = false;
     chase_memory = 0;
     chase_memory_max = variable_global_exists("monster_chase_memory") ? global.monster_chase_memory : 45;
     spawn_x = x;
@@ -357,7 +334,20 @@ function scr_monster_ai_step() {
         exit;
     }
 
-    var _sees_player = scr_monster_can_see_player();
+    var _sees_player = false;
+    if (obj_player.is_dead || obj_player.invisible_timer > 0) {
+        sight_check_result = false;
+        sight_check_timer = 0;
+    } else {
+        sight_check_timer -= 1;
+        if (sight_check_timer <= 0) {
+            sight_check_result = scr_monster_can_see_player();
+            sight_check_timer = sight_check_interval + irandom(2);
+        }
+
+        _sees_player = sight_check_result;
+    }
+
     if (_sees_player) {
         chase_memory = chase_memory_max;
     } else if (chase_memory > 0) {

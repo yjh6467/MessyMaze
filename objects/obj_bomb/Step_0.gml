@@ -28,19 +28,13 @@ switch (bomb_state) {
             image_index = 0;
             image_speed = 0;
 
-            for (var _tx = -bomb_range_tiles; _tx <= bomb_range_tiles; _tx += 1) {
-                for (var _ty = -bomb_range_tiles; _ty <= bomb_range_tiles; _ty += 1) {
-                    var _cell_cx = _cx + _tx * _tile;
-                    var _cell_cy = _cy + _ty * _tile;
-
-                    if (_tx * _tx + _ty * _ty > bomb_range_tiles_sq) continue;
-
-                    var _hit = collision_rectangle(_cell_cx - _tile * 0.5, _cell_cy - _tile * 0.5, _cell_cx + _tile * 0.5, _cell_cy + _tile * 0.5, obj_player, false, true);
-                    if (_hit != noone) {
-                        scr_player_hit("bomb");
-                        _tx = bomb_range_tiles + 1;
-                        break;
-                    }
+            for (var _i = 0; _i < array_length(bomb_range_offsets_x); _i += 1) {
+                var _cell_cx = _cx + bomb_range_offsets_x[_i] * _tile;
+                var _cell_cy = _cy + bomb_range_offsets_y[_i] * _tile;
+                var _hit = collision_rectangle(_cell_cx - _tile * 0.5, _cell_cy - _tile * 0.5, _cell_cx + _tile * 0.5, _cell_cy + _tile * 0.5, obj_player, false, true);
+                if (_hit != noone) {
+                    scr_player_hit("bomb");
+                    break;
                 }
             }
         }
