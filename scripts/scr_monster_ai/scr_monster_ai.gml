@@ -20,16 +20,7 @@ function scr_monster_place_meeting_static_wall(_test_x, _test_y) {
 }
 
 function scr_monster_place_meeting_rotating_wall(_test_x, _test_y) {
-    var _rotating_walls = scr_get_rotating_wall_instances();
-
-    for (var _i = 0; _i < array_length(_rotating_walls); _i += 1) {
-        var _wall = _rotating_walls[_i];
-        if (scr_place_meeting_rotating_wall_visual(_test_x, _test_y, _wall)) {
-            return true;
-        }
-    }
-
-    return false;
+    return scr_place_meeting_rotating_wall_visual(_test_x, _test_y);
 }
 
 function scr_monster_in_rotating_wall_zone(_test_x, _test_y) {

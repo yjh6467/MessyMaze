@@ -115,16 +115,7 @@ var _place_meeting_static_wall = function(_test_x, _test_y) {
 };
 
 var _place_meeting_rotating_wall = function(_test_x, _test_y) {
-    var _rotating_walls = scr_get_rotating_wall_instances();
-
-    for (var _i = 0; _i < array_length(_rotating_walls); _i += 1) {
-        var _wall = _rotating_walls[_i];
-        if (scr_place_meeting_rotating_wall_visual(_test_x, _test_y, _wall)) {
-            return true;
-        }
-    }
-
-    return false;
+    return scr_place_meeting_rotating_wall_visual(_test_x, _test_y);
 };
 
 var _push_out_of_rotating_walls = function() {
@@ -132,7 +123,6 @@ var _push_out_of_rotating_walls = function() {
 
     for (var _i = 0; _i < array_length(_rotating_walls); _i += 1) {
         var _wall = _rotating_walls[_i];
-        if (!scr_place_meeting_rotating_wall_visual(x, y, _wall)) continue;
         scr_rotating_wall_push_instance(id, _wall, "rotating_wall_crush");
     }
 };

@@ -60,15 +60,8 @@ for (var _i = 0; _i < array_length(_rotating_wall_objects); _i += 1) {
 
             visual_angle -= other.rotation_speed;
 
-            player_to_push = noone;
-            with (obj_player) {
-                if (scr_place_meeting_rotating_wall_visual(x, y, other.id)) {
-                    other.player_to_push = id;
-                }
-            }
-
-            var _player = player_to_push;
-            if (_player != noone) {
+            if (instance_exists(obj_player)) {
+                var _player = instance_find(obj_player, 0);
                 scr_rotating_wall_push_instance(_player, id, "rotating_wall_crush");
             }
         }
