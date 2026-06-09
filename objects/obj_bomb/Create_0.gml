@@ -11,6 +11,16 @@ bomb_range_tiles_sq = bomb_range_tiles * bomb_range_tiles;
 warning_time = variable_global_exists("bomb_warning_time") ? global.bomb_warning_time : 300;
 state_timer = warning_time;
 bomb_warning_sprites = [spr_boom1, spr_boom2, spr_boom3, spr_boom4];
+bomb_range_offsets_x = [];
+bomb_range_offsets_y = [];
+for (var _tx = -bomb_range_tiles; _tx <= bomb_range_tiles; _tx += 1) {
+    for (var _ty = -bomb_range_tiles; _ty <= bomb_range_tiles; _ty += 1) {
+        if (_tx * _tx + _ty * _ty <= bomb_range_tiles_sq) {
+            array_push(bomb_range_offsets_x, _tx);
+            array_push(bomb_range_offsets_y, _ty);
+        }
+    }
+}
 explode_time = sprite_get_number(spr_boom) * 3;
 explode_frame = 0;
 explode_frame_speed = sprite_get_number(spr_boom) / explode_time;

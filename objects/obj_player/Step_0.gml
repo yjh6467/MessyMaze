@@ -88,12 +88,7 @@ var _collect_score_slime_pieces = function() {
 var _place_meeting_static_wall = function(_test_x, _test_y) {
     for (var _wall_i = 0; _wall_i < instance_number(obj_wall_parent); _wall_i += 1) {
         var _wall = instance_find(obj_wall_parent, _wall_i);
-        if (_wall.object_index == obj_rotating_wall_horizontal) continue;
-        if (_wall.object_index == obj_rotating_wall_vertical) continue;
-        if (_wall.object_index == obj_rotating_wall_north) continue;
-        if (_wall.object_index == obj_rotating_wall_east) continue;
-        if (_wall.object_index == obj_rotating_wall_open_south) continue;
-        if (_wall.object_index == obj_rotating_wall_open_west) continue;
+        if (scr_is_rotating_wall_object(_wall.object_index)) continue;
 
         if (place_meeting(_test_x, _test_y, _wall)) {
             return true;
@@ -109,14 +104,7 @@ var _place_meeting_static_wall = function(_test_x, _test_y) {
 };
 
 var _place_meeting_rotating_wall = function(_test_x, _test_y) {
-    var _rotating_wall_objects = [
-        obj_rotating_wall_horizontal,
-        obj_rotating_wall_vertical,
-        obj_rotating_wall_north,
-        obj_rotating_wall_east,
-        obj_rotating_wall_open_south,
-        obj_rotating_wall_open_west
-    ];
+    var _rotating_wall_objects = scr_get_rotating_wall_objects();
 
     for (var _i = 0; _i < array_length(_rotating_wall_objects); _i += 1) {
         for (var _j = 0; _j < instance_number(_rotating_wall_objects[_i]); _j += 1) {
@@ -132,14 +120,7 @@ var _place_meeting_rotating_wall = function(_test_x, _test_y) {
 };
 
 var _push_out_of_rotating_walls = function() {
-    var _rotating_wall_objects = [
-        obj_rotating_wall_horizontal,
-        obj_rotating_wall_vertical,
-        obj_rotating_wall_north,
-        obj_rotating_wall_east,
-        obj_rotating_wall_open_south,
-        obj_rotating_wall_open_west
-    ];
+    var _rotating_wall_objects = scr_get_rotating_wall_objects();
 
     for (var _i = 0; _i < array_length(_rotating_wall_objects); _i += 1) {
         for (var _j = 0; _j < instance_number(_rotating_wall_objects[_i]); _j += 1) {
@@ -173,13 +154,7 @@ var _push_out_of_rotating_walls = function() {
 
                 for (var _wall_i = 0; _wall_i < instance_number(obj_wall_parent); _wall_i += 1) {
                     var _block_wall = instance_find(obj_wall_parent, _wall_i);
-                    if (_block_wall.object_index == obj_rotating_wall_center) continue;
-                    if (_block_wall.object_index == obj_rotating_wall_horizontal) continue;
-                    if (_block_wall.object_index == obj_rotating_wall_vertical) continue;
-                    if (_block_wall.object_index == obj_rotating_wall_north) continue;
-                    if (_block_wall.object_index == obj_rotating_wall_east) continue;
-                    if (_block_wall.object_index == obj_rotating_wall_open_south) continue;
-                    if (_block_wall.object_index == obj_rotating_wall_open_west) continue;
+                    if (scr_is_rotating_wall_object(_block_wall.object_index)) continue;
 
                     if (place_meeting(x + _push_step_x, y + _push_step_y, _block_wall)) {
                         _blocked_by_wall = true;

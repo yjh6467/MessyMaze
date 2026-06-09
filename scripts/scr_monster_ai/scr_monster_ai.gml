@@ -1,11 +1,5 @@
 function scr_monster_is_rotating_wall_object(_object_index) {
-    return _object_index == obj_rotating_wall_horizontal
-        || _object_index == obj_rotating_wall_vertical
-        || _object_index == obj_rotating_wall_north
-        || _object_index == obj_rotating_wall_east
-        || _object_index == obj_rotating_wall_open_south
-        || _object_index == obj_rotating_wall_open_west
-        || _object_index == obj_rotating_wall_center;
+    return scr_is_rotating_wall_object(_object_index);
 }
 
 function scr_monster_place_meeting_static_wall(_test_x, _test_y) {
@@ -27,14 +21,7 @@ function scr_monster_place_meeting_static_wall(_test_x, _test_y) {
 }
 
 function scr_monster_place_meeting_rotating_wall(_test_x, _test_y) {
-    var _rotating_wall_objects = [
-        obj_rotating_wall_horizontal,
-        obj_rotating_wall_vertical,
-        obj_rotating_wall_north,
-        obj_rotating_wall_east,
-        obj_rotating_wall_open_south,
-        obj_rotating_wall_open_west
-    ];
+    var _rotating_wall_objects = scr_get_rotating_wall_objects();
 
     for (var _i = 0; _i < array_length(_rotating_wall_objects); _i += 1) {
         for (var _j = 0; _j < instance_number(_rotating_wall_objects[_i]); _j += 1) {
@@ -324,6 +311,9 @@ function scr_monster_ai_init(_idle_sprite, _walk_left_sprite, _walk_right_sprite
     walk_swap_left = choose(true, false);
     decision_interval = variable_global_exists("monster_direction_interval") ? global.monster_direction_interval : 18;
     decision_timer = irandom(decision_interval);
+    sight_check_interval = 5;
+    sight_check_timer = irandom(sight_check_interval);
+    sight_check_result = false;
     chase_memory = 0;
     chase_memory_max = variable_global_exists("monster_chase_memory") ? global.monster_chase_memory : 45;
     spawn_x = x;
@@ -357,7 +347,20 @@ function scr_monster_ai_step() {
         exit;
     }
 
-    var _sees_player = scr_monster_can_see_player();
+    var _sees_player = false;
+    if (obj_player.is_dead || obj_player.invisible_timer > 0) {
+        sight_check_result = false;
+        sight_check_timer = 0;
+    } else {
+        sight_check_timer -= 1;
+        if (sight_check_timer <= 0) {
+            sight_check_result = scr_monster_can_see_player();
+            sight_check_timer = sight_check_interval + irandom(2);
+        }
+
+        _sees_player = sight_check_result;
+    }
+
     if (_sees_player) {
         chase_memory = chase_memory_max;
     } else if (chase_memory > 0) {

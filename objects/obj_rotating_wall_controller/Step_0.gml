@@ -9,14 +9,7 @@ if (
 
 if (!enabled) exit;
 
-var _rotating_wall_objects = [
-    obj_rotating_wall_horizontal,
-    obj_rotating_wall_vertical,
-    obj_rotating_wall_north,
-    obj_rotating_wall_east,
-    obj_rotating_wall_open_south,
-    obj_rotating_wall_open_west
-];
+var _rotating_wall_objects = scr_get_rotating_wall_objects();
 
 for (var _i = 0; _i < array_length(_rotating_wall_objects); _i += 1) {
     with (_rotating_wall_objects[_i]) {
@@ -95,13 +88,7 @@ for (var _i = 0; _i < array_length(_rotating_wall_objects); _i += 1) {
                         for (var _wall_i = 0; _wall_i < instance_number(obj_wall_parent); _wall_i += 1) {
                             var _wall = instance_find(obj_wall_parent, _wall_i);
                             if (_wall == other.id) continue;
-                            if (_wall.object_index == obj_rotating_wall_center) continue;
-                            if (_wall.object_index == obj_rotating_wall_horizontal) continue;
-                            if (_wall.object_index == obj_rotating_wall_vertical) continue;
-                            if (_wall.object_index == obj_rotating_wall_north) continue;
-                            if (_wall.object_index == obj_rotating_wall_east) continue;
-                            if (_wall.object_index == obj_rotating_wall_open_south) continue;
-                            if (_wall.object_index == obj_rotating_wall_open_west) continue;
+                            if (scr_is_rotating_wall_object(_wall.object_index)) continue;
 
                             if (place_meeting(x + _push_step_x, y + _push_step_y, _wall)) {
                                 _blocked_by_wall = true;

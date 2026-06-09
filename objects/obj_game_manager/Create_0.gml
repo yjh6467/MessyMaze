@@ -7,6 +7,9 @@ global.screen_shake_duration = 0;
 global.screen_shake_intensity = 0;
 global.screen_shake_camera_base_x = 0;
 global.screen_shake_camera_base_y = 0;
+if (variable_global_exists("screen_shake_camera") && global.screen_shake_camera != noone) {
+    camera_destroy(global.screen_shake_camera);
+}
 global.screen_shake_camera = camera_create_view(
     global.screen_shake_camera_base_x,
     global.screen_shake_camera_base_y,
