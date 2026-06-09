@@ -178,6 +178,10 @@ function scr_get_static_wall_instances() {
 function scr_rotating_wall_push_instance(_target, _wall, _crush_reason) {
     if (_target == noone || _wall == noone) return false;
     if (!instance_exists(_target) || !instance_exists(_wall)) return false;
+    if (_target.object_index == obj_player) {
+        if (variable_instance_exists(_target, "is_dead") && _target.is_dead) return false;
+        if (variable_global_exists("game_over") && global.game_over) return false;
+    }
 
     var _target_x = _target.x;
     var _target_y = _target.y;
@@ -199,6 +203,10 @@ function scr_rotating_wall_push_instance(_target, _wall, _crush_reason) {
 
     repeat (32) {
         if (!instance_exists(_target) || !instance_exists(_wall)) return true;
+        if (_target.object_index == obj_player) {
+            if (variable_instance_exists(_target, "is_dead") && _target.is_dead) return true;
+            if (variable_global_exists("game_over") && global.game_over) return true;
+        }
         if (!scr_place_meeting_rotating_wall_visual(_target.x, _target.y, _wall, _target)) return true;
 
         var _push_step_x = round(lengthdir_x(1, _push_dir));
